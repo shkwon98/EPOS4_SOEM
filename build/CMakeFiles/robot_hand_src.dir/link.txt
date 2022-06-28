@@ -1,0 +1,2 @@
+/usr/bin/ar qc librobot_hand_src.a  CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o
+/usr/bin/ranlib librobot_hand_src.a
