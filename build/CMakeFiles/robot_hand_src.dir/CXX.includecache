@@ -7,8 +7,6 @@
 #IncludeRegexTransform: 
 
 ../include/robot_hand/Macro.h
-ethercat.h
-../include/robot_hand/ethercat.h
 pdo_def.h
 ../include/robot_hand/pdo_def.h
 
@@ -25,8 +23,8 @@ servo_def.h
 ../include/robot_hand/servo_def.h
 
 ../include/robot_hand/servo_def.h
-stdint.h
--
+ethercat.h
+../include/robot_hand/ethercat.h
 
 ../include/robot_hand/tcpPacket.h
 string.h

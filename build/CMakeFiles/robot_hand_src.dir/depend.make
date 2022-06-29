@@ -20,6 +20,20 @@ CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o: /usr/local/includ
 
 CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: ../include/robot_hand/servo_def.h
 CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: ../src/robot_hand/servo_def.cpp
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercat.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatbase.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatcoe.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatconfig.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatdc.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercateoe.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatfoe.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatmain.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatprint.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercatsoe.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/ethercattype.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/nicdrv.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/osal.h
+CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o: /usr/local/include/soem/osal_defs.h
 
 CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o: ../include/robot_hand/Macro.h
 CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o: ../include/robot_hand/pdo_def.h

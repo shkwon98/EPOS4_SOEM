@@ -1,7 +1,6 @@
 #ifndef MACRO_H
 #define MACRO_H
 
-#include "ethercat.h"
 #include "pdo_def.h"
 
 #define TCP_PORT 2000
@@ -22,12 +21,12 @@ typedef enum
 
 typedef struct
 {
-    int   taskType;
-    int   taskMotion;
+    int32   taskType;
+    int32   taskMotion;
 
-    float disp;
-    float period;
-    int   repeat;
+    float32 disp;
+    float32 period;
+    int32   repeat;
 
     // unsigned int numRun;
 
@@ -37,9 +36,9 @@ typedef struct
 
 typedef struct
 {
-    INT16      torque;
-    INT32      velocity;
-    INT32      position;
+    int16      torque;
+    int32      velocity;
+    int32      position;
     TASK_PARAM taskParam;
 }INPUT_LIST;
 
@@ -47,9 +46,9 @@ typedef struct
 {
     uint  timeStamp;
 
-    INT32 actualVelocity;
-    INT16 actualTorque;
-    INT32 actualPosition;
+    int32 actualVelocity;
+    int16 actualTorque;
+    int32 actualPosition;
 }LOG_DATA;
 #define LOG_DATA_SIZE sizeof(LOG_DATA)
 

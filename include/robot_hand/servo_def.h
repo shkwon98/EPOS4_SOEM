@@ -1,7 +1,7 @@
 #ifndef __SERVO_DEF_H__
 #define __SERVO_DEF_H__
 
-#include <stdint.h>
+#include "ethercat.h"
 
 #define _BV(bit) 				(1 << (bit)) 
 #define bit_is_set(val, bit) 	(val & _BV(bit))
@@ -53,13 +53,6 @@
 #define OP_MODE_CYCLIC_SYNC_TORQUE			0x0A
 
 #define SERVO_TIMEOUT						50000
-
-typedef int32_t  INT32;
-typedef uint32_t UINT32;
-typedef int16_t  INT16;
-typedef uint16_t UINT16;
-typedef uint8_t UINT8;
-typedef int8_t INT8;
 
 #ifndef PI
 #define PI	    3.14159265359

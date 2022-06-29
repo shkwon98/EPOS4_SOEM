@@ -6,7 +6,7 @@
 
 #include "servo_def.h"
 
-int ServoOn_GetCtrlWrd(uint16_t StatusWord, uint16_t * ControlWord)
+int ServoOn_GetCtrlWrd(uint16 StatusWord, uint16 * ControlWord)
 {
     int  _enable = 0;
     if (bit_is_clear(StatusWord, STATUSWORD_OPERATION_ENABLE_BIT)) //Not ENABLED yet
