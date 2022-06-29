@@ -1,9 +1,9 @@
-#include "udpPacket.h"
+#include "CUdpPacket.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-UDP_Packet::UDP_Packet()
+CUdpPacket::CUdpPacket()
 {
     memset(&server_addr, 0, sizeof(server_addr));
 
@@ -17,12 +17,12 @@ UDP_Packet::UDP_Packet()
     server_addr.sin_addr.s_addr = inet_addr(GUI_PC_IP);
     server_addr.sin_port = htons(UDP_PORT);
 }
-UDP_Packet::~UDP_Packet()
+CUdpPacket::~CUdpPacket()
 {
     close(socket_fd);
 }
 
-void UDP_Packet::setCommandHeader(uint16_t header)
+void CUdpPacket::setCommandHeader(uint16_t header)
 {
    // Initialize Variable
     encodeIndex = 0;
@@ -46,7 +46,7 @@ void UDP_Packet::setCommandHeader(uint16_t header)
 }
 
 
-void UDP_Packet::sendPacket()
+void CUdpPacket::sendPacket()
 {
    ///////////////////////////////////////////////////////
    ///////////////////////////////////////////////////////

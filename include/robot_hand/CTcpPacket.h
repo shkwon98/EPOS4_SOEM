@@ -1,5 +1,5 @@
-#ifndef TCPPACKET_H_
-#define TCPPACKET_H_
+#ifndef CTCPPACKET_H_
+#define CTCPPACKET_H_
 
 #include <string.h>
 #include <sys/socket.h>
@@ -9,11 +9,11 @@
 #include <unistd.h>
 #include "Macro.h"
 
-class TCP_Packet
+class CTcpPacket
 {
 public:
-    TCP_Packet();
-    ~TCP_Packet();
+    CTcpPacket();
+    ~CTcpPacket();
 
     short getHeader()
     {
@@ -44,4 +44,4 @@ private:
     int retval;
 };
 
-#endif /* TCPPACKET_H_ */
+#endif /* CTCPPACKET_H_ */

@@ -1,9 +1,9 @@
-#include "tcpPacket.h"
+#include "CTcpPacket.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-TCP_Packet::TCP_Packet()
+CTcpPacket::CTcpPacket()
 {
     memset(&server_addr, 0, sizeof(server_addr));
     memset(&client_addr, 0, sizeof(client_addr));
@@ -42,13 +42,13 @@ TCP_Packet::TCP_Packet()
     fcntl(client_fd, F_SETFL, flag | O_NONBLOCK);
 }
 
-TCP_Packet::~TCP_Packet()
+CTcpPacket::~CTcpPacket()
 {
     close(server_fd);
 }
 
 
-int TCP_Packet::readPacket()
+int CTcpPacket::readPacket()
 {
     retval = read(client_fd, rxBuffer, sizeof(rxBuffer));
     if (retval < 0)

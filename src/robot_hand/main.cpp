@@ -7,10 +7,13 @@
 
 #include "ethercat.h"
 #include "schedDeadline.h"
-#include "pdoMapping.h"
-#include "tcpPacket.h"
-#include "udpPacket.h"
+#include "CPdoMapping.h"
+#include "CTcpPacket.h"
+#include "CUdpPacket.h"
 #include "Macro.h"
+
+CPdoMapping cPdoMapping;
+
 
 using namespace std;
 
@@ -36,8 +39,8 @@ bool inOP = false;
 int64 g_offsetTime = 0;
 int64 g_delta;
 
-UDP_Packet* pUdpPacket;
-TCP_Packet* pTcpPacket;
+CUdpPacket* pUdpPacket;
+CTcpPacket* pTcpPacket;
 
 bool bRunStart = false;
 short mode;
@@ -97,7 +100,7 @@ OSAL_THREAD_FUNC activationProcess(char *ifname)
                     printf("\nName: %s EEpMan: %d eep_id: %d State %d\n", ec_slave[slc].name, ec_slave[slc].eep_man, ec_slave[slc].eep_id, ec_slave[slc].state);
 
                     /* link slave specific setup to preOP->safeOP hook */
-                    mapMotorPDOs_callback(slc);
+                    cPdoMapping.mapMotorPDOs_callback(slc);
                 }
             }
 
@@ -282,7 +285,7 @@ double sin_motion(double pos_init, double pos_fin, double time_init, double time
 
 OSAL_THREAD_FUNC tcpCommunicate()
 {
-    pTcpPacket = new TCP_Packet();
+    pTcpPacket = new CTcpPacket();
 
     while (1)  // 10ms non-rt loop
     {
@@ -334,7 +337,7 @@ OSAL_THREAD_FUNC motorControl()
         pthread_cancel(pthread_self());
     }
 
-    pUdpPacket = new UDP_Packet;
+    pUdpPacket = new CUdpPacket;
 
     unsigned int tick = 0;
     double curPos = 0.0;

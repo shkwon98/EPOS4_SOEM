@@ -4,10 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/pdoMapping.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o"
+  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/CPdoMapping.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/CPdoMapping.cpp.o"
+  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/CTcpPacket.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/CTcpPacket.cpp.o"
+  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/CUdpPacket.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/CUdpPacket.cpp.o"
+  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/main.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/main.cpp.o"
   "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/servo_def.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o"
-  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/tcpPacket.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o"
-  "/home/pi/EPOS4_SOEM_Controller/src/robot_hand/udpPacket.cpp" "/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

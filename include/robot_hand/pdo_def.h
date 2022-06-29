@@ -3,8 +3,6 @@
 
 #include "servo_def.h"
 
-// EPOS4 PDO mapping
-
 // Structure representing the Object Dictionary
 typedef struct _mapping_obj
 {

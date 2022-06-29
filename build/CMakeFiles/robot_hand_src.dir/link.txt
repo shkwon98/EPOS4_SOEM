@@ -1,2 +1,2 @@
-/usr/bin/ar qc librobot_hand_src.a  CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o
+/usr/bin/ar qc librobot_hand_src.a  CMakeFiles/robot_hand_src.dir/src/robot_hand/CPdoMapping.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/CTcpPacket.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/CUdpPacket.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/main.cpp.o CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o
 /usr/bin/ranlib librobot_hand_src.a

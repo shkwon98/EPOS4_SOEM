@@ -13,12 +13,11 @@ include_directories(include/${PROJECT_NAME})
 include_directories(src/${PROJECT_NAME})
 
 # Add the source files from the <src> directory
-add_library(${PROJECT_NAME}_src
-        src/${PROJECT_NAME}/servo_def.cpp
-        src/${PROJECT_NAME}/pdoMapping.cpp
-        src/${PROJECT_NAME}/tcpPacket.cpp
-        src/${PROJECT_NAME}/udpPacket.cpp
-        )
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    )
+
+add_library(${PROJECT_NAME}_src ${SRC_FILES})
 
 target_link_libraries(${PROJECT_NAME}_src soem ${OS_LIBS})
 

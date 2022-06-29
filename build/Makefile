@@ -136,12 +136,94 @@ robot_hand_test/fast:
 	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/build
 .PHONY : robot_hand_test/fast
 
+src/robot_hand/CPdoMapping.o: src/robot_hand/CPdoMapping.cpp.o
+
+.PHONY : src/robot_hand/CPdoMapping.o
+
+# target to build an object file
+src/robot_hand/CPdoMapping.cpp.o:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CPdoMapping.cpp.o
+.PHONY : src/robot_hand/CPdoMapping.cpp.o
+
+src/robot_hand/CPdoMapping.i: src/robot_hand/CPdoMapping.cpp.i
+
+.PHONY : src/robot_hand/CPdoMapping.i
+
+# target to preprocess a source file
+src/robot_hand/CPdoMapping.cpp.i:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CPdoMapping.cpp.i
+.PHONY : src/robot_hand/CPdoMapping.cpp.i
+
+src/robot_hand/CPdoMapping.s: src/robot_hand/CPdoMapping.cpp.s
+
+.PHONY : src/robot_hand/CPdoMapping.s
+
+# target to generate assembly for a file
+src/robot_hand/CPdoMapping.cpp.s:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CPdoMapping.cpp.s
+.PHONY : src/robot_hand/CPdoMapping.cpp.s
+
+src/robot_hand/CTcpPacket.o: src/robot_hand/CTcpPacket.cpp.o
+
+.PHONY : src/robot_hand/CTcpPacket.o
+
+# target to build an object file
+src/robot_hand/CTcpPacket.cpp.o:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CTcpPacket.cpp.o
+.PHONY : src/robot_hand/CTcpPacket.cpp.o
+
+src/robot_hand/CTcpPacket.i: src/robot_hand/CTcpPacket.cpp.i
+
+.PHONY : src/robot_hand/CTcpPacket.i
+
+# target to preprocess a source file
+src/robot_hand/CTcpPacket.cpp.i:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CTcpPacket.cpp.i
+.PHONY : src/robot_hand/CTcpPacket.cpp.i
+
+src/robot_hand/CTcpPacket.s: src/robot_hand/CTcpPacket.cpp.s
+
+.PHONY : src/robot_hand/CTcpPacket.s
+
+# target to generate assembly for a file
+src/robot_hand/CTcpPacket.cpp.s:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CTcpPacket.cpp.s
+.PHONY : src/robot_hand/CTcpPacket.cpp.s
+
+src/robot_hand/CUdpPacket.o: src/robot_hand/CUdpPacket.cpp.o
+
+.PHONY : src/robot_hand/CUdpPacket.o
+
+# target to build an object file
+src/robot_hand/CUdpPacket.cpp.o:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CUdpPacket.cpp.o
+.PHONY : src/robot_hand/CUdpPacket.cpp.o
+
+src/robot_hand/CUdpPacket.i: src/robot_hand/CUdpPacket.cpp.i
+
+.PHONY : src/robot_hand/CUdpPacket.i
+
+# target to preprocess a source file
+src/robot_hand/CUdpPacket.cpp.i:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CUdpPacket.cpp.i
+.PHONY : src/robot_hand/CUdpPacket.cpp.i
+
+src/robot_hand/CUdpPacket.s: src/robot_hand/CUdpPacket.cpp.s
+
+.PHONY : src/robot_hand/CUdpPacket.s
+
+# target to generate assembly for a file
+src/robot_hand/CUdpPacket.cpp.s:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/CUdpPacket.cpp.s
+.PHONY : src/robot_hand/CUdpPacket.cpp.s
+
 src/robot_hand/main.o: src/robot_hand/main.cpp.o
 
 .PHONY : src/robot_hand/main.o
 
 # target to build an object file
 src/robot_hand/main.cpp.o:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/main.cpp.o
 	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.o
 .PHONY : src/robot_hand/main.cpp.o
 
@@ -151,6 +233,7 @@ src/robot_hand/main.i: src/robot_hand/main.cpp.i
 
 # target to preprocess a source file
 src/robot_hand/main.cpp.i:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/main.cpp.i
 	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.i
 .PHONY : src/robot_hand/main.cpp.i
 
@@ -160,35 +243,9 @@ src/robot_hand/main.s: src/robot_hand/main.cpp.s
 
 # target to generate assembly for a file
 src/robot_hand/main.cpp.s:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/main.cpp.s
 	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.s
 .PHONY : src/robot_hand/main.cpp.s
-
-src/robot_hand/pdoMapping.o: src/robot_hand/pdoMapping.cpp.o
-
-.PHONY : src/robot_hand/pdoMapping.o
-
-# target to build an object file
-src/robot_hand/pdoMapping.cpp.o:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o
-.PHONY : src/robot_hand/pdoMapping.cpp.o
-
-src/robot_hand/pdoMapping.i: src/robot_hand/pdoMapping.cpp.i
-
-.PHONY : src/robot_hand/pdoMapping.i
-
-# target to preprocess a source file
-src/robot_hand/pdoMapping.cpp.i:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.i
-.PHONY : src/robot_hand/pdoMapping.cpp.i
-
-src/robot_hand/pdoMapping.s: src/robot_hand/pdoMapping.cpp.s
-
-.PHONY : src/robot_hand/pdoMapping.s
-
-# target to generate assembly for a file
-src/robot_hand/pdoMapping.cpp.s:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.s
-.PHONY : src/robot_hand/pdoMapping.cpp.s
 
 src/robot_hand/servo_def.o: src/robot_hand/servo_def.cpp.o
 
@@ -217,60 +274,6 @@ src/robot_hand/servo_def.cpp.s:
 	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.s
 .PHONY : src/robot_hand/servo_def.cpp.s
 
-src/robot_hand/tcpPacket.o: src/robot_hand/tcpPacket.cpp.o
-
-.PHONY : src/robot_hand/tcpPacket.o
-
-# target to build an object file
-src/robot_hand/tcpPacket.cpp.o:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o
-.PHONY : src/robot_hand/tcpPacket.cpp.o
-
-src/robot_hand/tcpPacket.i: src/robot_hand/tcpPacket.cpp.i
-
-.PHONY : src/robot_hand/tcpPacket.i
-
-# target to preprocess a source file
-src/robot_hand/tcpPacket.cpp.i:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.i
-.PHONY : src/robot_hand/tcpPacket.cpp.i
-
-src/robot_hand/tcpPacket.s: src/robot_hand/tcpPacket.cpp.s
-
-.PHONY : src/robot_hand/tcpPacket.s
-
-# target to generate assembly for a file
-src/robot_hand/tcpPacket.cpp.s:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.s
-.PHONY : src/robot_hand/tcpPacket.cpp.s
-
-src/robot_hand/udpPacket.o: src/robot_hand/udpPacket.cpp.o
-
-.PHONY : src/robot_hand/udpPacket.o
-
-# target to build an object file
-src/robot_hand/udpPacket.cpp.o:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o
-.PHONY : src/robot_hand/udpPacket.cpp.o
-
-src/robot_hand/udpPacket.i: src/robot_hand/udpPacket.cpp.i
-
-.PHONY : src/robot_hand/udpPacket.i
-
-# target to preprocess a source file
-src/robot_hand/udpPacket.cpp.i:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.i
-.PHONY : src/robot_hand/udpPacket.cpp.i
-
-src/robot_hand/udpPacket.s: src/robot_hand/udpPacket.cpp.s
-
-.PHONY : src/robot_hand/udpPacket.s
-
-# target to generate assembly for a file
-src/robot_hand/udpPacket.cpp.s:
-	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.s
-.PHONY : src/robot_hand/udpPacket.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -281,21 +284,21 @@ help:
 	@echo "... edit_cache"
 	@echo "... robot_hand_src"
 	@echo "... robot_hand_test"
+	@echo "... src/robot_hand/CPdoMapping.o"
+	@echo "... src/robot_hand/CPdoMapping.i"
+	@echo "... src/robot_hand/CPdoMapping.s"
+	@echo "... src/robot_hand/CTcpPacket.o"
+	@echo "... src/robot_hand/CTcpPacket.i"
+	@echo "... src/robot_hand/CTcpPacket.s"
+	@echo "... src/robot_hand/CUdpPacket.o"
+	@echo "... src/robot_hand/CUdpPacket.i"
+	@echo "... src/robot_hand/CUdpPacket.s"
 	@echo "... src/robot_hand/main.o"
 	@echo "... src/robot_hand/main.i"
 	@echo "... src/robot_hand/main.s"
-	@echo "... src/robot_hand/pdoMapping.o"
-	@echo "... src/robot_hand/pdoMapping.i"
-	@echo "... src/robot_hand/pdoMapping.s"
 	@echo "... src/robot_hand/servo_def.o"
 	@echo "... src/robot_hand/servo_def.i"
 	@echo "... src/robot_hand/servo_def.s"
-	@echo "... src/robot_hand/tcpPacket.o"
-	@echo "... src/robot_hand/tcpPacket.i"
-	@echo "... src/robot_hand/tcpPacket.s"
-	@echo "... src/robot_hand/udpPacket.o"
-	@echo "... src/robot_hand/udpPacket.i"
-	@echo "... src/robot_hand/udpPacket.s"
 .PHONY : help
 
 

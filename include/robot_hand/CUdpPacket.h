@@ -1,5 +1,5 @@
-#ifndef UDPPACKET_H_
-#define UDPPACKET_H_
+#ifndef CUDPPACKET_H_
+#define CUDPPACKET_H_
 
 #include <string.h>
 #include <sys/socket.h>
@@ -10,11 +10,11 @@
 
 #define UDP_PORT 3000
 
-class UDP_Packet
+class CUdpPacket
 {
 public:
-    UDP_Packet();
-    ~UDP_Packet();
+    CUdpPacket();
+    ~CUdpPacket();
 
     void setCommandHeader(uint16_t header);
 
@@ -36,4 +36,4 @@ private:
     unsigned char txBuffer[TX_BUFFER_SIZE];
 };
 
-#endif /* UDPPACKET_H_ */
+#endif /* CUDPPACKET_H_ */
