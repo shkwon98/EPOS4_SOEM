@@ -7,6 +7,7 @@
 
 #include "ethercat.h"
 #include "schedDeadline.h"
+#include "pdoMapping.h"
 #include "tcpPacket.h"
 #include "udpPacket.h"
 #include "Macro.h"
@@ -42,104 +43,6 @@ bool bRunStart = false;
 short mode;
 INPUT_LIST input;
 
-
-/** Function for PDO mapping **/
-int EPOS4Setup(uint16 slave)
-{
-    uint8 PDO_abled = 0;
-    uint8 RxPDOs_number = 0;
-    uint8 TxPDOs_number = 0;
-
-    /* <0x1600> Receive PDO Mapping 1 */
-    mapping_obj RxPDO1 = { 0x1600, 0x01, sizeof(uint32), 0x60400010 };   // 0x60400010 : control_word               UInt16
-    mapping_obj RxPDO2 = { 0x1600, 0x02, sizeof(uint32), 0x60600008 };   // 0x60600008 : mode_of_operation          Int8
-    mapping_obj RxPDO3 = { 0x1600, 0x03, sizeof(uint32), 0x60710010 };   // 0x60710010 : target_torque              Int16
-    mapping_obj RxPDO4 = { 0x1600, 0x04, sizeof(uint32), 0x60ff0020 };   // 0x60ff0020 : target_velocity            Int32
-    mapping_obj RxPDO5 = { 0x1600, 0x05, sizeof(uint32), 0x607a0020 };   // 0x607a0020 : target_position            Int32
-    mapping_obj RxPDO6 = { 0x1600, 0x06, sizeof(uint32), 0x60810020 };   // 0x60810020 : profile_velocity           Int32
-    // mapping_obj RxPDO7 = { 0x1600, 0x07, sizeof(), 0x };
-    // mapping_obj RxPDO8 = { 0x1600, 0x08, sizeof(), 0x };
-    mapping_obj SM2_choose_RxPDO = { 0x1C12, 0x01, sizeof(uint16), RxPDO1.Index };
-
-    /* <0x1A00> Transmit PDO Mapping 1 */
-    mapping_obj TxPDO1 = { 0x1A00, 0x01, sizeof(uint32), 0x60410010 };   // 0x60410010 : status_word                UInt16
-    mapping_obj TxPDO2 = { 0x1A00, 0x02, sizeof(uint32), 0x60610008 };   // 0x60610008 : mode_of_operation_display  Int8
-    mapping_obj TxPDO3 = { 0x1A00, 0x03, sizeof(uint32), 0x60640020 };   // 0x60640020 : position_actual_value      Int32
-    mapping_obj TxPDO4 = { 0x1A00, 0x04, sizeof(uint32), 0x606C0020 };   // 0x606C0020 : velocity_actual_value      Int32
-    mapping_obj TxPDO5 = { 0x1A00, 0x05, sizeof(uint32), 0x60770010 };   // 0x60770010 : torque_actual_value        Int16
-    mapping_obj TxPDO6 = { 0x1A00, 0x06, sizeof(uint32), 0x30D10220 };   // 0x30D10220 : current_actual_value       Int32
-    // mapping_obj TxPDO7 = { 0x1A00, 0x07, sizeof(), 0x };
-    // mapping_obj TxPDO8 = { 0x1A00, 0x08, sizeof(), 0x };
-    mapping_obj SM3_choose_TxPDO = { 0x1C13, 0x01, sizeof(uint16), TxPDO1.Index };
-
-    // 1. Write the value “0” (zero) to subindex 0x00 (disable PDO).
-    ec_SDOwrite(slave, 0x1600, 0x00, FALSE, sizeof(PDO_abled), &PDO_abled, EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, 0x1A00, 0x00, FALSE, sizeof(PDO_abled), &PDO_abled, EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, 0x1C12, 0x00, FALSE, sizeof(PDO_abled), &PDO_abled, EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, 0x1C13, 0x00, FALSE, sizeof(PDO_abled), &PDO_abled, EC_TIMEOUTSAFE);
-
-    // 2. Modify the desired objects in subindex 0x01...0x0n.
-    ec_SDOwrite(slave, RxPDO1.Index, RxPDO1.SubIndex, FALSE, RxPDO1.Size, &(RxPDO1.Value), EC_TIMEOUTSAFE);
-    RxPDOs_number++;
-    ec_SDOwrite(slave, RxPDO2.Index, RxPDO2.SubIndex, FALSE, RxPDO2.Size, &(RxPDO2.Value), EC_TIMEOUTSAFE);
-    RxPDOs_number++;
-    ec_SDOwrite(slave, RxPDO3.Index, RxPDO3.SubIndex, FALSE, RxPDO3.Size, &(RxPDO3.Value), EC_TIMEOUTSAFE);
-    RxPDOs_number++;
-    ec_SDOwrite(slave, RxPDO4.Index, RxPDO4.SubIndex, FALSE, RxPDO4.Size, &(RxPDO4.Value), EC_TIMEOUTSAFE);
-    RxPDOs_number++;
-    ec_SDOwrite(slave, RxPDO5.Index, RxPDO5.SubIndex, FALSE, RxPDO5.Size, &(RxPDO5.Value), EC_TIMEOUTSAFE);
-    RxPDOs_number++;
-    ec_SDOwrite(slave, RxPDO6.Index, RxPDO6.SubIndex, FALSE, RxPDO6.Size, &(RxPDO6.Value), EC_TIMEOUTSAFE);
-    RxPDOs_number++;
-    // ec_SDOwrite(slave, RxPDO7.Index, RxPDO7.SubIndex, FALSE, RxPDO7.Size, &(RxPDO7.Value), EC_TIMEOUTSAFE);
-    // RxPDOs_number++;
-    // ec_SDOwrite(slave, RxPDO8.Index, RxPDO8.SubIndex, FALSE, RxPDO8.Size, &(RxPDO8.Value), EC_TIMEOUTSAFE);
-    // RxPDOs_number++;
-
-    ec_SDOwrite(slave, TxPDO1.Index, TxPDO1.SubIndex, FALSE, TxPDO1.Size, &(TxPDO1.Value), EC_TIMEOUTSAFE);
-    TxPDOs_number++;
-    ec_SDOwrite(slave, TxPDO2.Index, TxPDO2.SubIndex, FALSE, TxPDO2.Size, &(TxPDO2.Value), EC_TIMEOUTSAFE);
-    TxPDOs_number++;
-    ec_SDOwrite(slave, TxPDO3.Index, TxPDO3.SubIndex, FALSE, TxPDO3.Size, &(TxPDO3.Value), EC_TIMEOUTSAFE);
-    TxPDOs_number++;
-    ec_SDOwrite(slave, TxPDO4.Index, TxPDO4.SubIndex, FALSE, TxPDO4.Size, &(TxPDO4.Value), EC_TIMEOUTSAFE);
-    TxPDOs_number++;
-    ec_SDOwrite(slave, TxPDO5.Index, TxPDO5.SubIndex, FALSE, TxPDO5.Size, &(TxPDO5.Value), EC_TIMEOUTSAFE);
-    TxPDOs_number++;
-    ec_SDOwrite(slave, TxPDO6.Index, TxPDO6.SubIndex, FALSE, TxPDO6.Size, &(TxPDO6.Value), EC_TIMEOUTSAFE);
-    TxPDOs_number++;
-    // ec_SDOwrite(slave, TxPDO7.Index, TxPDO7.SubIndex, FALSE, TxPDO7.Size, &(TxPDO7.Value), EC_TIMEOUTSAFE);
-    // RxPDOs_number++;
-    // ec_SDOwrite(slave, TxPDO8.Index, TxPDO8.SubIndex, FALSE, TxPDO8.Size, &(TxPDO8.Value), EC_TIMEOUTSAFE);
-    // RxPDOs_number++;
-
-    // 3. Write the No. of mapped object n in subindex 0x00
-    ec_SDOwrite(slave, 0x1600, 0x00, FALSE, sizeof(RxPDOs_number), &(RxPDOs_number), EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, 0x1A00, 0x00, FALSE, sizeof(TxPDOs_number), &(TxPDOs_number), EC_TIMEOUTSAFE);
-
-    // 4. Make the changes effective
-    PDO_abled = 1;
-    ec_SDOwrite(slave, SM2_choose_RxPDO.Index, SM2_choose_RxPDO.SubIndex, FALSE, SM2_choose_RxPDO.Size, &(SM2_choose_RxPDO.Value), EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, SM3_choose_TxPDO.Index, SM3_choose_TxPDO.SubIndex, FALSE, SM3_choose_TxPDO.Size, &(SM3_choose_TxPDO.Value), EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, 0x1C12, 0x00, FALSE, sizeof(PDO_abled), &(PDO_abled), EC_TIMEOUTSAFE);
-    ec_SDOwrite(slave, 0x1C13, 0x00, FALSE, sizeof(PDO_abled), &(PDO_abled), EC_TIMEOUTSAFE);
-
-    // OBJ velocity_unit = { 0x60A9, 0x00, sizeof(uint32), (uint32)0x00B44700 };
-
-    // /* SETUP of default values */
-    // ec_SDOwrite(slave, velocity_unit.index, velocity_unit.sub_index, FALSE, velocity_unit.size, &(velocity_unit.value), EC_TIMEOUTSAFE);
-
-    //  /* Check that the parameters are set correctly */
-    // int retval;
-    // uint32 velocity_unit_value;
-    // retval = ec_SDOread(slave, velocity_unit.index, velocity_unit.sub_index, FALSE, &(velocity_unit.size), &velocity_unit_value, EC_TIMEOUTSAFE);
-    // printf("velocity unit=%u,size=%d,return=%d\n", velocity_unit_value, velocity_unit.size, retval);
-
-    // ec_dcsync0(slave, TRUE, DEADLINE, DEADLINE / 2);
-
-    printf("EPOS4 slave %d set\n", slave);
-    return 1;
-}
 
 /** Function that updates the deadline to synchronize mainThread **/
 void refreshDeadline(struct sched_attr *attr, uint64 addTime)
@@ -194,7 +97,7 @@ OSAL_THREAD_FUNC activationProcess(char *ifname)
                     printf("\nName: %s EEpMan: %d eep_id: %d State %d\n", ec_slave[slc].name, ec_slave[slc].eep_man, ec_slave[slc].eep_id, ec_slave[slc].state);
 
                     /* link slave specific setup to preOP->safeOP hook */
-                    ec_slave[slc].PO2SOconfig = EPOS4Setup;
+                    mapMotorPDOs_callback(slc);
                 }
             }
 
@@ -235,7 +138,7 @@ OSAL_THREAD_FUNC activationProcess(char *ifname)
             /* Now we have a system up and running, all slaves are in state operational */
             if (ec_slave[0].state == EC_STATE_OPERATIONAL)
             {
-                printf("Operational state reached for all slaves!\n");
+                printf("Operational state reached for all slaves!\n\n");
                 inOP = true; // activate cyclic process
 
                 while (1)
@@ -457,7 +360,7 @@ OSAL_THREAD_FUNC motorControl()
             //
             clock_gettime(CLOCK_MONOTONIC, &ts);
             t_loopStart = ts.tv_nsec;
-            // printf("\r| [Loop time: %.4lfms], ", (t_loopStart - t_lastLoopStart) / 1000000.0);
+            printf("\r| [Loop time: %.4lfms], ", (t_loopStart - t_lastLoopStart) / 1000000.0);
             t_lastLoopStart = t_loopStart;
 
             ////////////////////////////////////////////////////////////////////
@@ -566,7 +469,7 @@ OSAL_THREAD_FUNC motorControl()
             /********************** TASK TIME MEASUREMENT **********************/
             clock_gettime(CLOCK_MONOTONIC, &ts);
             t_taskEnd = ts.tv_nsec;
-            // printf("[Task time: %.4lfms] |   ", (t_taskEnd - t_loopStart) / 1000000.0);
+            printf("[Task time: %.4lfms] |   ", (t_taskEnd - t_loopStart) / 1000000.0);
             fflush(stdout);
         }
     }

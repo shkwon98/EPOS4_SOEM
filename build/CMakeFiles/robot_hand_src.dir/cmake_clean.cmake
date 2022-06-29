@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o"
+  "CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o"
   "CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o"
   "CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o"
   "librobot_hand_src.pdb"

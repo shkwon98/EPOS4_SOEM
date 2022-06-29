@@ -190,6 +190,9 @@ robot_hand_SOURCE_DIR:STATIC=/home/pi/EPOS4_SOEM_Controller
 //Dependencies for the target
 robot_hand_src_LIB_DEPENDS:STATIC=general;soem;general;pthread;general;m;
 
+//The directory containing a CMake configuration file for soem.
+soem_DIR:PATH=/usr/local/share/soem/cmake
+
 
 ########################
 # INTERNAL cache entries

@@ -81,9 +81,33 @@ CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o.provides: CMakeFile
 CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o.provides.build: CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o
 
 
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o: CMakeFiles/robot_hand_src.dir/flags.make
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o: ../src/robot_hand/pdoMapping.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o -c /home/pi/EPOS4_SOEM_Controller/src/robot_hand/pdoMapping.cpp
+
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pi/EPOS4_SOEM_Controller/src/robot_hand/pdoMapping.cpp > CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.i
+
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pi/EPOS4_SOEM_Controller/src/robot_hand/pdoMapping.cpp -o CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.s
+
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.requires:
+
+.PHONY : CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.requires
+
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.provides: CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.requires
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.provides.build
+.PHONY : CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.provides
+
+CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.provides.build: CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o
+
+
 CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o: CMakeFiles/robot_hand_src.dir/flags.make
 CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o: ../src/robot_hand/tcpPacket.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o -c /home/pi/EPOS4_SOEM_Controller/src/robot_hand/tcpPacket.cpp
 
 CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.i: cmake_force
@@ -107,7 +131,7 @@ CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o.provides.build: CMa
 
 CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o: CMakeFiles/robot_hand_src.dir/flags.make
 CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o: ../src/robot_hand/udpPacket.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o -c /home/pi/EPOS4_SOEM_Controller/src/robot_hand/udpPacket.cpp
 
 CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.i: cmake_force
@@ -132,6 +156,7 @@ CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o.provides.build: CMa
 # Object files for target robot_hand_src
 robot_hand_src_OBJECTS = \
 "CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o" \
+"CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o" \
 "CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o" \
 "CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o"
 
@@ -139,11 +164,12 @@ robot_hand_src_OBJECTS = \
 robot_hand_src_EXTERNAL_OBJECTS =
 
 librobot_hand_src.a: CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o
+librobot_hand_src.a: CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o
 librobot_hand_src.a: CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o
 librobot_hand_src.a: CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o
 librobot_hand_src.a: CMakeFiles/robot_hand_src.dir/build.make
 librobot_hand_src.a: CMakeFiles/robot_hand_src.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX static library librobot_hand_src.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library librobot_hand_src.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/robot_hand_src.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/robot_hand_src.dir/link.txt --verbose=$(VERBOSE)
 
@@ -153,6 +179,7 @@ CMakeFiles/robot_hand_src.dir/build: librobot_hand_src.a
 .PHONY : CMakeFiles/robot_hand_src.dir/build
 
 CMakeFiles/robot_hand_src.dir/requires: CMakeFiles/robot_hand_src.dir/src/robot_hand/servo_def.cpp.o.requires
+CMakeFiles/robot_hand_src.dir/requires: CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o.requires
 CMakeFiles/robot_hand_src.dir/requires: CMakeFiles/robot_hand_src.dir/src/robot_hand/tcpPacket.cpp.o.requires
 CMakeFiles/robot_hand_src.dir/requires: CMakeFiles/robot_hand_src.dir/src/robot_hand/udpPacket.cpp.o.requires
 

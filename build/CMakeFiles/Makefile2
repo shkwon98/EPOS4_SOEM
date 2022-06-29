@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/pi/EPOS4_SOEM_Controller/build
 CMakeFiles/robot_hand_src.dir/all:
 	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/depend
 	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=3,4,5,6 "Built target robot_hand_src"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target robot_hand_src"
 .PHONY : CMakeFiles/robot_hand_src.dir/all
 
 # Include target in all.
@@ -76,7 +76,7 @@ all: CMakeFiles/robot_hand_src.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/robot_hand_src.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/EPOS4_SOEM_Controller/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/EPOS4_SOEM_Controller/build/CMakeFiles 5
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/robot_hand_src.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/EPOS4_SOEM_Controller/build/CMakeFiles 0
 .PHONY : CMakeFiles/robot_hand_src.dir/rule
@@ -97,39 +97,39 @@ clean: CMakeFiles/robot_hand_src.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/robot_hand_simpletest.dir
+# Target rules for target CMakeFiles/robot_hand_test.dir
 
 # All Build rule for target.
-CMakeFiles/robot_hand_simpletest.dir/all: CMakeFiles/robot_hand_src.dir/all
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/depend
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=1,2 "Built target robot_hand_simpletest"
-.PHONY : CMakeFiles/robot_hand_simpletest.dir/all
+CMakeFiles/robot_hand_test.dir/all: CMakeFiles/robot_hand_src.dir/all
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/depend
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles --progress-num=6,7 "Built target robot_hand_test"
+.PHONY : CMakeFiles/robot_hand_test.dir/all
 
 # Include target in all.
-all: CMakeFiles/robot_hand_simpletest.dir/all
+all: CMakeFiles/robot_hand_test.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/robot_hand_simpletest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/EPOS4_SOEM_Controller/build/CMakeFiles 6
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/robot_hand_simpletest.dir/all
+CMakeFiles/robot_hand_test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/EPOS4_SOEM_Controller/build/CMakeFiles 7
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/robot_hand_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/EPOS4_SOEM_Controller/build/CMakeFiles 0
-.PHONY : CMakeFiles/robot_hand_simpletest.dir/rule
+.PHONY : CMakeFiles/robot_hand_test.dir/rule
 
 # Convenience name for target.
-robot_hand_simpletest: CMakeFiles/robot_hand_simpletest.dir/rule
+robot_hand_test: CMakeFiles/robot_hand_test.dir/rule
 
-.PHONY : robot_hand_simpletest
-
-# clean rule for target.
-CMakeFiles/robot_hand_simpletest.dir/clean:
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/clean
-.PHONY : CMakeFiles/robot_hand_simpletest.dir/clean
+.PHONY : robot_hand_test
 
 # clean rule for target.
-clean: CMakeFiles/robot_hand_simpletest.dir/clean
+CMakeFiles/robot_hand_test.dir/clean:
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/clean
+.PHONY : CMakeFiles/robot_hand_test.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/robot_hand_test.dir/clean
 
 .PHONY : clean
 

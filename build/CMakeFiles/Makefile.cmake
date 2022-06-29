@@ -27,6 +27,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.10/Modules/Platform/Linux-GNU.cmake"
   "/usr/local/share/cmake-3.10/Modules/Platform/Linux.cmake"
   "/usr/local/share/cmake-3.10/Modules/Platform/UnixPaths.cmake"
+  "/usr/local/share/soem/cmake/soemConfig-noconfig.cmake"
+  "/usr/local/share/soem/cmake/soemConfig.cmake"
   )
 
 # The corresponding makefile is:
@@ -43,5 +45,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/robot_hand_src.dir/DependInfo.cmake"
-  "CMakeFiles/robot_hand_simpletest.dir/DependInfo.cmake"
+  "CMakeFiles/robot_hand_test.dir/DependInfo.cmake"
   )

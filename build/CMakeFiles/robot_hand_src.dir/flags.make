@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIC
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/include/soem -I/home/pi/EPOS4_SOEM_Controller/include/robot_hand -I/home/pi/EPOS4_SOEM_Controller/src/robot_hand 
+CXX_INCLUDES = -I/home/pi/EPOS4_SOEM_Controller/include/robot_hand -I/home/pi/EPOS4_SOEM_Controller/src/robot_hand -isystem /usr/local/include/soem 
 

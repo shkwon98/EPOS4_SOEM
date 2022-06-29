@@ -28,7 +28,7 @@ This is a real-time EtherCAT master application to control EPOS4 motor.
 
 `cd build`
 
-`cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/`
+`cmake ..`
 
 `make`
 

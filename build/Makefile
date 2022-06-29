@@ -124,17 +124,17 @@ robot_hand_src/fast:
 .PHONY : robot_hand_src/fast
 
 #=============================================================================
-# Target rules for targets named robot_hand_simpletest
+# Target rules for targets named robot_hand_test
 
 # Build rule for target.
-robot_hand_simpletest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 robot_hand_simpletest
-.PHONY : robot_hand_simpletest
+robot_hand_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 robot_hand_test
+.PHONY : robot_hand_test
 
 # fast build rule for target.
-robot_hand_simpletest/fast:
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/build
-.PHONY : robot_hand_simpletest/fast
+robot_hand_test/fast:
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/build
+.PHONY : robot_hand_test/fast
 
 src/robot_hand/main.o: src/robot_hand/main.cpp.o
 
@@ -142,7 +142,7 @@ src/robot_hand/main.o: src/robot_hand/main.cpp.o
 
 # target to build an object file
 src/robot_hand/main.cpp.o:
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/src/robot_hand/main.cpp.o
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.o
 .PHONY : src/robot_hand/main.cpp.o
 
 src/robot_hand/main.i: src/robot_hand/main.cpp.i
@@ -151,7 +151,7 @@ src/robot_hand/main.i: src/robot_hand/main.cpp.i
 
 # target to preprocess a source file
 src/robot_hand/main.cpp.i:
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/src/robot_hand/main.cpp.i
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.i
 .PHONY : src/robot_hand/main.cpp.i
 
 src/robot_hand/main.s: src/robot_hand/main.cpp.s
@@ -160,8 +160,35 @@ src/robot_hand/main.s: src/robot_hand/main.cpp.s
 
 # target to generate assembly for a file
 src/robot_hand/main.cpp.s:
-	$(MAKE) -f CMakeFiles/robot_hand_simpletest.dir/build.make CMakeFiles/robot_hand_simpletest.dir/src/robot_hand/main.cpp.s
+	$(MAKE) -f CMakeFiles/robot_hand_test.dir/build.make CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.s
 .PHONY : src/robot_hand/main.cpp.s
+
+src/robot_hand/pdoMapping.o: src/robot_hand/pdoMapping.cpp.o
+
+.PHONY : src/robot_hand/pdoMapping.o
+
+# target to build an object file
+src/robot_hand/pdoMapping.cpp.o:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.o
+.PHONY : src/robot_hand/pdoMapping.cpp.o
+
+src/robot_hand/pdoMapping.i: src/robot_hand/pdoMapping.cpp.i
+
+.PHONY : src/robot_hand/pdoMapping.i
+
+# target to preprocess a source file
+src/robot_hand/pdoMapping.cpp.i:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.i
+.PHONY : src/robot_hand/pdoMapping.cpp.i
+
+src/robot_hand/pdoMapping.s: src/robot_hand/pdoMapping.cpp.s
+
+.PHONY : src/robot_hand/pdoMapping.s
+
+# target to generate assembly for a file
+src/robot_hand/pdoMapping.cpp.s:
+	$(MAKE) -f CMakeFiles/robot_hand_src.dir/build.make CMakeFiles/robot_hand_src.dir/src/robot_hand/pdoMapping.cpp.s
+.PHONY : src/robot_hand/pdoMapping.cpp.s
 
 src/robot_hand/servo_def.o: src/robot_hand/servo_def.cpp.o
 
@@ -253,10 +280,13 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... robot_hand_src"
-	@echo "... robot_hand_simpletest"
+	@echo "... robot_hand_test"
 	@echo "... src/robot_hand/main.o"
 	@echo "... src/robot_hand/main.i"
 	@echo "... src/robot_hand/main.s"
+	@echo "... src/robot_hand/pdoMapping.o"
+	@echo "... src/robot_hand/pdoMapping.i"
+	@echo "... src/robot_hand/pdoMapping.s"
 	@echo "... src/robot_hand/servo_def.o"
 	@echo "... src/robot_hand/servo_def.i"
 	@echo "... src/robot_hand/servo_def.s"
