@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/robot_hand_test.dir/src/robot_hand/main.cpp.o  -o robot_hand_test librobot_hand_src.a /usr/local/lib/libsoem.a -lpthread -lm -lrt 

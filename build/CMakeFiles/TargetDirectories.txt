@@ -1,4 +1,0 @@
-/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/rebuild_cache.dir
-/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/edit_cache.dir
-/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_src.dir
-/home/pi/EPOS4_SOEM_Controller/build/CMakeFiles/robot_hand_test.dir
