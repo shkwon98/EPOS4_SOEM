@@ -6,41 +6,42 @@
 #include <iostream>
 
 #include "ethercat.h"
-#include "schedDeadline.h"
+#include "ecatErrorHandle.h"
+#include "scheduling.h"
 #include "CPdoMapping.h"
 #include "CTcpPacket.h"
 #include "CUdpPacket.h"
 #include "Macro.h"
+#include "CEcatMaster.h"
 
 CPdoMapping cPdoMapping;
+CUdpPacket* pUdpPacket;
+CTcpPacket* pTcpPacket;
 
-
+using namespace ecat;
 using namespace std;
+
 
 #define EC_TIMEOUTMON 500
 // #define EPOS4 1
-#define NUMOFWHEEL_DRIVE 1
+#define NUMOF_DRIVE 1
 #define CONTROL_PERIOD 1000.0 // us
 #define DEADLINE 1000000 //deadline in ns
 
-EPOS4_Drive_pt epos4_drive_pt[NUMOFWHEEL_DRIVE];
+EPOS4_Drive_pt epos4_drive_pt[NUMOF_DRIVE];
 
-int started[NUMOFWHEEL_DRIVE] = { 0 };
+int started[NUMOF_DRIVE] = { 0 };
 uint servo_ready;
 
-char IOmap[4096];
-OSAL_THREAD_HANDLE thread1, thread2, thread3;
-int expectedWKC;
-bool needlf;
-volatile int wkc;
-uint8 currentgroup = 0;
+OSAL_THREAD_HANDLE thread1, thread2, thread3, thread4;
+
+extern int expectedWKC;
+extern volatile int wkc;
+extern uint8 currentgroup;
+
 bool inOP = false;
 
-int64 g_offsetTime = 0;
-int64 g_delta;
-
-CUdpPacket* pUdpPacket;
-CTcpPacket* pTcpPacket;
+int64 toff = 0;
 
 bool bRunStart = false;
 short mode;
@@ -54,7 +55,7 @@ void refreshDeadline(struct sched_attr *attr, uint64 addTime)
     attr->sched_deadline = addTime;
     attr->sched_period = addTime;
 
-    if (sched_setattr(gettid(), attr, 0))
+    if (sched_setattr(0, attr, 0))
     {
         perror("sched_setattr failed");
         exit(1);
@@ -72,205 +73,61 @@ void ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
     if (delta > 0) { integral++; }
     if (delta < 0) { integral--; }
     *offsetTime = -(delta / 100) - (integral / 20);
-    g_delta = delta;
+    // g_delta = delta;
 }
 
 
-OSAL_THREAD_FUNC activationProcess(char *ifname)
+bool ecat_activate(CEcatMaster master)
 {
-    int chk, slc;
-    needlf = false;
-
-    printf("Starting activation process\n");
-
-    /* initialise SOEM, bind socket to ifname */
-    if (ec_init(ifname))
+    if (ec_slavecount >= 1)
     {
-        printf("ec_init on %s succeeded.\n", ifname);
-
-        /* find and auto-config slaves */
-        if (ec_config_init(FALSE) > 0)
+        for (int slc = 1; slc <= ec_slavecount; ++slc)
         {
-            printf("%d slaves found and configured.\n", ec_slavecount);
-
-            if (ec_slavecount >= 1)
-            {
-                for (slc = 1; slc <= ec_slavecount; ++slc)
-                {
-                    printf("\nName: %s EEpMan: %d eep_id: %d State %d\n", ec_slave[slc].name, ec_slave[slc].eep_man, ec_slave[slc].eep_id, ec_slave[slc].state);
-
-                    /* link slave specific setup to preOP->safeOP hook */
-                    cPdoMapping.mapMotorPDOs_callback(slc);
-                }
-            }
-
-            /* maps the previously mapped PDOs into the local buffer */
-            ec_config_map(&IOmap);
-            /* Configurate distributed clock */
-            ec_configdc();
-
-            /* wait for all slaves to reach SAFE_OP state */
-            ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE);
-            printf("\nSlaves mapped, state to SAFE_OP...\n");
-
-            /* connect struct pointers to slave I/O pointers */
-            for (int i = 0; i < NUMOFWHEEL_DRIVE; ++i)
-            {
-                epos4_drive_pt[i].ptOutParam = (EPOS4_DRIVE_RxPDO_t*)(ec_slave[i + 1].outputs);
-                epos4_drive_pt[i].ptInParam = (EPOS4_DRIVE_TxPDO_t*)(ec_slave[i + 1].inputs);
-            }
-
-            expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
-            // printf("Calculated workcounter %d\n", expectedWKC);
-
-            /* send one valid process data to make outputs in slaves happy */
-            ec_send_processdata();
-            ec_receive_processdata(EC_TIMEOUTRET);
-
-            /* Call ec_dcsync0() to synchronize the slave and master clock */
-            ec_dcsync0(1, TRUE, DEADLINE, 0); // SYNC0 on slave 1
-
-            /* request OP state for all slaves */
-            printf("Request operational state for all slaves...\n");
-            ec_slave[0].state = EC_STATE_OPERATIONAL;
-            ec_writestate(0);
-
-            /* wait for all slaves to reach OP state */
-            ec_statecheck(0, EC_STATE_OPERATIONAL, 5 * EC_TIMEOUTSTATE);
-
-            /* Now we have a system up and running, all slaves are in state operational */
-            if (ec_slave[0].state == EC_STATE_OPERATIONAL)
-            {
-                printf("Operational state reached for all slaves!\n\n");
-                inOP = true; // activate cyclic process
-
-                while (1)
-                {
-                    osal_usleep(50000);
-                }
-
-                inOP = false;
-            }
-
-            else
-            {
-                printf("Not all slaves reached operational state.\n");
-                ec_readstate();
-                for (int i = 1; i <= ec_slavecount; i++)
-                {
-                    if (ec_slave[i].state != EC_STATE_OPERATIONAL)
-                    {
-                        printf("Slave %d State=0x%2.2x StatusCode=0x%4.4x : %s\n", i, ec_slave[i].state, ec_slave[i].ALstatuscode, ec_ALstatuscode2string(ec_slave[i].ALstatuscode));
-                    }
-                }
-                for (int i = 0; i < NUMOFWHEEL_DRIVE; i++)
-                {
-                    ec_dcsync0(i + 1, FALSE, 0, 0);
-                }
-            }
-
-            printf("\nRequest init state for all slaves\n");
-            ec_slave[0].state = EC_STATE_INIT;
-            /* request INIT state for all slaves */
-            ec_writestate(0);
+            cout << "\nName: " << ec_slave[slc].name << ", EEpMan: " << ec_slave[slc].eep_man << ", eep_id: " << ec_slave[slc].eep_id << endl;
+            cPdoMapping.mapMotorPDOs_callback(slc);
         }
-        else
+    }
+    master.configDC();
+    master.configMap();
+    master.movetoState(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE);
+
+    /* connect struct pointers to slave I/O pointers */
+    for (int i = 0; i < NUMOF_DRIVE; ++i)
+    {
+        epos4_drive_pt[i].ptOutParam = (EPOS4_DRIVE_RxPDO_t*)(master.getOutput_slave(i + 1));
+        epos4_drive_pt[i].ptInParam = (EPOS4_DRIVE_TxPDO_t*)(master.getInput_slave(i + 1));
+    }
+    expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
+    // cout << "Calculated workcounter " << expectedWKC << endl;
+
+    master.sendAndReceive(EC_TIMEOUTRET);
+    master.config_ec_sync0(1, TRUE, DEADLINE, 0); // SYNC0 on slave 1
+
+    cout << "Request operational state for all slaves...\n";
+    master.movetoState(0, EC_STATE_OPERATIONAL, 5 * EC_TIMEOUTSTATE);  // request OP state for all slaves
+    if (ec_slave[0].state == EC_STATE_OPERATIONAL)
+    {
+        cout << "Operational state reached for all slaves!\n\n";
+        inOP = true; // activate cyclic process
+
+        while (1)
         {
-            printf("No slaves found!\n");
+            sleep(1);
         }
-        printf("End simple test, close socket\n");
-        /* stop SOEM, close socket */
-        ec_close();
     }
     else
     {
-        printf("No socket connection on %s\nExecute as root\n", ifname);
-    }
-}
+        cout << "Not all slaves reached operational state.\n";
 
-OSAL_THREAD_FUNC errorHandler()
-{
-    int slave;
-
-    while (1)
-    {
-        if (inOP && ((wkc < expectedWKC) || ec_group[currentgroup].docheckstate))
+        master.printState();
+        for (int i = 0; i < NUMOF_DRIVE; i++)
         {
-            if (needlf)
-            {
-                needlf = false;
-                printf("\n");
-            }
-
-            /* one ore more slaves are not responding */
-            ec_group[currentgroup].docheckstate = FALSE;
-            ec_readstate();
-
-            for (slave = 1; slave <= ec_slavecount; ++slave)
-            {
-                if ((ec_slave[slave].group == currentgroup) && (ec_slave[slave].state != EC_STATE_OPERATIONAL))
-                {
-                    ec_group[currentgroup].docheckstate = TRUE;
-
-                    if (ec_slave[slave].state == (EC_STATE_SAFE_OP + EC_STATE_ERROR))
-                    {
-                        printf("ERROR : slave %d is in SAFE_OP + ERROR, attempting ack.\n", slave);
-                        ec_slave[slave].state = (EC_STATE_SAFE_OP + EC_STATE_ACK);
-                        ec_writestate(slave);
-                    }
-                    else if (ec_slave[slave].state == EC_STATE_SAFE_OP)
-                    {
-                        printf("WARNING : slave %d is in SAFE_OP, change to OPERATIONAL.\n", slave);
-                        ec_slave[slave].state = EC_STATE_OPERATIONAL;
-                        ec_writestate(slave);
-                    }
-                    else if (ec_slave[slave].state > EC_STATE_NONE)
-                    {
-                        if (ec_reconfig_slave(slave, EC_TIMEOUTMON))
-                        {
-                            ec_slave[slave].islost = FALSE;
-                            printf("MESSAGE : slave %d reconfigured\n", slave);
-                        }
-                    }
-                    else if (!ec_slave[slave].islost)
-                    {
-                        /* re-check state */
-                        ec_statecheck(slave, EC_STATE_OPERATIONAL, EC_TIMEOUTRET);
-
-                        if (ec_slave[slave].state == EC_STATE_NONE)
-                        {
-                            ec_slave[slave].islost = TRUE;
-                            printf("ERROR : slave %d lost\n", slave);
-                        }
-                    }
-                }
-
-                if (ec_slave[slave].islost)
-                {
-                    if (ec_slave[slave].state == EC_STATE_NONE)
-                    {
-                        if (ec_recover_slave(slave, EC_TIMEOUTMON))
-                        {
-                            ec_slave[slave].islost = FALSE;
-                            printf("MESSAGE : slave %d recovered\n", slave);
-                        }
-                    }
-                    else
-                    {
-                        ec_slave[slave].islost = FALSE;
-                        printf("MESSAGE : slave %d found\n", slave);
-                    }
-                }
-            }
-
-            if (!ec_group[currentgroup].docheckstate)
-                printf("OK : all slaves resumed OPERATIONAL.\n");
+            master.config_ec_sync0(i + 1, FALSE, 0, 0);
         }
-
-        osal_usleep(10000);
+        inOP = false;
     }
+    return inOP;
 }
-
 
 
 double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now)
@@ -351,7 +208,7 @@ OSAL_THREAD_FUNC motorControl()
     while (1)
     {
         /* calculate next cycle start */
-        refreshDeadline(&attr, (uint64)(DEADLINE + g_offsetTime));
+        refreshDeadline(&attr, (uint64)(DEADLINE + toff));
         /* wait to cycle start */
         sched_yield();
 
@@ -363,7 +220,7 @@ OSAL_THREAD_FUNC motorControl()
             //
             clock_gettime(CLOCK_MONOTONIC, &ts);
             t_loopStart = ts.tv_nsec;
-            printf("\r| [Loop time: %.4lfms], ", (t_loopStart - t_lastLoopStart) / 1000000.0);
+            // printf("\r| [Loop time: %.4lfms], ", (t_loopStart - t_lastLoopStart) / 1000000.0);
             t_lastLoopStart = t_loopStart;
 
             ////////////////////////////////////////////////////////////////////
@@ -374,7 +231,7 @@ OSAL_THREAD_FUNC motorControl()
             wkc = ec_receive_processdata(EC_TIMEOUTRET);
 
             servo_ready = 0;
-            for (i = 0; i < NUMOFWHEEL_DRIVE; ++i)
+            for (i = 0; i < NUMOF_DRIVE; ++i)
             {
                 controlword = 0;
                 started[i] = ServoOn_GetCtrlWrd(epos4_drive_pt[i].ptInParam->StatusWord, &controlword);
@@ -385,7 +242,7 @@ OSAL_THREAD_FUNC motorControl()
             }
 
             /* BEGIN USER CODE */
-            if (servo_ready == NUMOFWHEEL_DRIVE) // The given task begins here
+            if (servo_ready == NUMOF_DRIVE) // The given task begins here
             {
                 switch (input.taskParam.taskType)
                 {
@@ -465,15 +322,15 @@ OSAL_THREAD_FUNC motorControl()
 
             if (ec_slave[0].hasdc)
             {
-                /* calculate g_offsetTime to get linux time and DC synced */
-                ec_sync(ec_DCtime, DEADLINE, &g_offsetTime);
+                /* calculate toff to get linux time and DC synced */
+                ec_sync(ec_DCtime, DEADLINE, &toff);
             }
 
             /********************** TASK TIME MEASUREMENT **********************/
             clock_gettime(CLOCK_MONOTONIC, &ts);
             t_taskEnd = ts.tv_nsec;
-            printf("[Task time: %.4lfms] |   ", (t_taskEnd - t_loopStart) / 1000000.0);
-            fflush(stdout);
+            // printf("[Task time: %.4lfms] |   ", (t_taskEnd - t_loopStart) / 1000000.0);
+            // fflush(stdout);
         }
     }
 
@@ -487,22 +344,26 @@ OSAL_THREAD_FUNC motorControl()
 
 int main(int argc, char *argv[])
 {
-    cout << "SOEM (Simple Open EtherCAT Master)" << endl;
-    cout << "< EPOS4 Motor Controller >\n" << endl;
+    cout << "SOEM (Simple Open EtherCAT Master)\n< EPOS4 Motor Controller >" << endl;
 
     if (argc > 1)
     {
+        /* create thread to handle slave error handling in OP */
+        osal_thread_create(&thread1, 128000, (void*)&errorHandle, NULL);
+
         /* create Non-RT thread (TCP Communication) */
-        osal_thread_create(&thread1, 128000, (void*)&tcpCommunicate, NULL);
+        osal_thread_create(&thread2, 128000, (void*)&tcpCommunicate, NULL);
 
         /* create RT thread (Motor Control) */
-        osal_thread_create(&thread2, 128000, (void*)&motorControl, NULL);
+        osal_thread_create(&thread3, 128000, (void*)&motorControl, NULL);
 
-        /* create thread to handle slave error handling in OP */
-        osal_thread_create(&thread3, 128000, (void*)&errorHandler, NULL);
+        CEcatMaster master(argv[1]);
 
-        /* start acyclic part to activate the cyclic threads */
-        activationProcess(argv[1]);
+        ecat_activate(master);
+
+
+        master.movetoState(0, EC_STATE_INIT, EC_TIMEOUTSTATE);
+        master.close_master();
     }
     else
     {
