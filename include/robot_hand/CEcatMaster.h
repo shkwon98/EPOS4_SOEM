@@ -22,24 +22,6 @@ namespace ecat
     */
     class CEcatMaster
     {
-    private:
-        char IOmap[4096]; /**< Buffer used by all slaves to write and read data */
-        // pthread_t tidm;
-        // bool thread = false;
-        // int64 cycletime;
-        // int64 toff;
-        // bool shutdown = true;
-        // int i = 0;
-        // long int time1;
-        // long int time2;
-        // std::array<long int, 50000> timecycle;
-        // long int cycle;
-        // void ec_sync(int64 reftime, int64 cycletime, int64 *offsettime);
-        // void ecatthread();
-        // void add_timespec(struct timespec *ts, int64 addtime);
-        // std::thread control_thread;
-        // std::mutex mtx;
-
     public:
         CEcatMaster(char *ifname);
         ~CEcatMaster();
@@ -125,6 +107,25 @@ namespace ecat
         //  * Each slave has to call this method to release the IObuffer.
         // */
         // void mutex_up();
+
+    private:
+        char IOmap[4096]; /**< Buffer used by all slaves to write and read data */
+        // pthread_t tidm;
+        // bool thread = false;
+        // int64 cycletime;
+        // int64 toff;
+        // bool shutdown = true;
+        // int i = 0;
+        // long int time1;
+        // long int time2;
+        // std::array<long int, 50000> timecycle;
+        // long int cycle;
+        // void ec_sync(int64 reftime, int64 cycletime, int64 *offsettime);
+        // void ecatthread();
+        // void add_timespec(struct timespec *ts, int64 addtime);
+        // std::thread control_thread;
+        // std::mutex mtx;
+
     };
 }
 

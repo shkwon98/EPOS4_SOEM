@@ -117,7 +117,7 @@ OSAL_THREAD_FUNC tcpCommunicate()
     delete tcpPacket;
 }
 
-OSAL_THREAD_FUNC motorControl()
+OSAL_THREAD_FUNC robotControl()
 {
     double t_loopStart, t_lastLoopStart, t_taskEnd;
     struct timespec ts;
@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
         osal_thread_create(&thread2, 128000, (void*)&tcpCommunicate, NULL);
 
         /* create RT thread (Motor Control) */
-        osal_thread_create(&thread3, 128000, (void*)&motorControl, NULL);
+        osal_thread_create(&thread3, 128000, (void*)&robotControl, NULL);
 
 
         CEcatMaster* master;
