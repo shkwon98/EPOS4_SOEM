@@ -14,13 +14,7 @@
 #include "Macro.h"
 #include "CEcatMaster.h"
 
-CPdoMapping cPdoMapping;
-CUdpPacket* pUdpPacket;
-CTcpPacket* pTcpPacket;
-
 using namespace ecat;
-using namespace std;
-
 
 #define EC_TIMEOUTMON 500
 // #define EPOS4 1
@@ -33,7 +27,7 @@ EPOS4_Drive_pt epos4_drive_pt[NUMOF_DRIVE];
 int started[NUMOF_DRIVE] = { 0 };
 uint servo_ready;
 
-OSAL_THREAD_HANDLE thread1, thread2, thread3, thread4;
+OSAL_THREAD_HANDLE thread1, thread2, thread3;
 
 extern int expectedWKC;
 extern volatile int wkc;
@@ -76,60 +70,6 @@ void ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
     // g_delta = delta;
 }
 
-
-bool ecat_activate(CEcatMaster master)
-{
-    if (ec_slavecount >= 1)
-    {
-        for (int slc = 1; slc <= ec_slavecount; ++slc)
-        {
-            cout << "\nName: " << ec_slave[slc].name << ", EEpMan: " << ec_slave[slc].eep_man << ", eep_id: " << ec_slave[slc].eep_id << endl;
-            cPdoMapping.mapMotorPDOs_callback(slc);
-        }
-    }
-    master.configDC();
-    master.configMap();
-    master.movetoState(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE);
-
-    /* connect struct pointers to slave I/O pointers */
-    for (int i = 0; i < NUMOF_DRIVE; ++i)
-    {
-        epos4_drive_pt[i].ptOutParam = (EPOS4_DRIVE_RxPDO_t*)(master.getOutput_slave(i + 1));
-        epos4_drive_pt[i].ptInParam = (EPOS4_DRIVE_TxPDO_t*)(master.getInput_slave(i + 1));
-    }
-    expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
-    // cout << "Calculated workcounter " << expectedWKC << endl;
-
-    master.sendAndReceive(EC_TIMEOUTRET);
-    master.config_ec_sync0(1, TRUE, DEADLINE, 0); // SYNC0 on slave 1
-
-    cout << "Request operational state for all slaves...\n";
-    master.movetoState(0, EC_STATE_OPERATIONAL, 5 * EC_TIMEOUTSTATE);  // request OP state for all slaves
-    if (ec_slave[0].state == EC_STATE_OPERATIONAL)
-    {
-        cout << "Operational state reached for all slaves!\n\n";
-        inOP = true; // activate cyclic process
-
-        while (1)
-        {
-            sleep(1);
-        }
-    }
-    else
-    {
-        cout << "Not all slaves reached operational state.\n";
-
-        master.printState();
-        for (int i = 0; i < NUMOF_DRIVE; i++)
-        {
-            master.config_ec_sync0(i + 1, FALSE, 0, 0);
-        }
-        inOP = false;
-    }
-    return inOP;
-}
-
-
 double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now)
 {
     double a = pos_init;
@@ -142,38 +82,39 @@ double sin_motion(double pos_init, double pos_fin, double time_init, double time
 
 OSAL_THREAD_FUNC tcpCommunicate()
 {
-    pTcpPacket = new CTcpPacket();
+    CTcpPacket* tcpPacket;
+    tcpPacket = new CTcpPacket();
 
     while (1)  // 10ms non-rt loop
     {
-        if (inOP && pTcpPacket->readPacket() > 0)
+        if (inOP && tcpPacket->readPacket() > 0)
         {
-            mode = pTcpPacket->getHeader();
+            mode = tcpPacket->getHeader();
             switch (mode)
             {
                 case COMMAND_SET_TASK_PARAM:
-                    pTcpPacket->decode(input.taskParam);
+                    tcpPacket->decode(input.taskParam);
                     break;
 
                 case COMMAND_RUN_CSP:
-                    pTcpPacket->decode(bRunStart);
+                    tcpPacket->decode(bRunStart);
                     break;
 
                 case COMMAND_RUN_CSV:
-                    pTcpPacket->decode(bRunStart);
-                    pTcpPacket->decode(input.velocity);
+                    tcpPacket->decode(bRunStart);
+                    tcpPacket->decode(input.velocity);
                     break;
 
                 case COMMAND_RUN_CST:
-                    pTcpPacket->decode(bRunStart);
-                    pTcpPacket->decode(input.torque);
+                    tcpPacket->decode(bRunStart);
+                    tcpPacket->decode(input.torque);
                     break;
             }
         }
         osal_usleep(10000);
     }
 
-    delete pTcpPacket;
+    delete tcpPacket;
 }
 
 OSAL_THREAD_FUNC motorControl()
@@ -190,11 +131,12 @@ OSAL_THREAD_FUNC motorControl()
 
     if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1)
     {
-        cout << "mlockall failed: %m" << endl;
+        std::cout << "mlockall failed: %m\n";
         pthread_cancel(pthread_self());
     }
 
-    pUdpPacket = new CUdpPacket;
+    CUdpPacket* udpPacket;
+    udpPacket = new CUdpPacket;
 
     unsigned int tick = 0;
     double curPos = 0.0;
@@ -306,8 +248,8 @@ OSAL_THREAD_FUNC motorControl()
                     epos4_drive_pt[0].ptOutParam->TargetPosition = (int)CONV_MM_to_INC(tarPos);
                 }
             }
-            // cout << "[Target Position: " << epos4_drive_pt[0].ptOutParam->TargetPosition << "] ";
-            // cout << "| [Actual Position : " << epos4_drive_pt[0].ptInParam->PositionActualValue << "] " << endl;
+            // std::cout << "[Target Position: " << epos4_drive_pt[0].ptOutParam->TargetPosition << "] ";
+            // std::cout << "| [Actual Position : " << epos4_drive_pt[0].ptInParam->PositionActualValue << "] " << std::endl;
 
             short header = STREAM_MODE;
             LOG_DATA logData;
@@ -316,9 +258,9 @@ OSAL_THREAD_FUNC motorControl()
             logData.actualTorque = epos4_drive_pt[0].ptInParam->TorqueActualValue;
             logData.actualPosition = epos4_drive_pt[0].ptInParam->PositionActualValue;
 
-            pUdpPacket->setCommandHeader(header);
-            pUdpPacket->encode(logData);
-            pUdpPacket->sendPacket();
+            udpPacket->setCommandHeader(header);
+            udpPacket->encode(logData);
+            udpPacket->sendPacket();
 
             if (ec_slave[0].hasdc)
             {
@@ -334,17 +276,24 @@ OSAL_THREAD_FUNC motorControl()
         }
     }
 
-    delete pUdpPacket;
+    delete udpPacket;
 
-    printf("End motor test, close socket\n");
+    printf("End EPOS4 Motor Controller, close socket\n");
     ec_close();
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 int main(int argc, char *argv[])
 {
-    cout << "SOEM (Simple Open EtherCAT Master)\n< EPOS4 Motor Controller >" << endl;
+    std::cout << "SOEM (Simple Open EtherCAT Master)\n< EPOS4 Motor Controller >\n\n";
 
     if (argc > 1)
     {
@@ -357,31 +306,74 @@ int main(int argc, char *argv[])
         /* create RT thread (Motor Control) */
         osal_thread_create(&thread3, 128000, (void*)&motorControl, NULL);
 
-        CEcatMaster master(argv[1]);
 
-        ecat_activate(master);
+        CEcatMaster* master;
+        master = new CEcatMaster(argv[1]);
 
+        master->printState1();
 
-        master.movetoState(0, EC_STATE_INIT, EC_TIMEOUTSTATE);
-        master.close_master();
+        for (int slave = 1; slave <= ec_slavecount; ++slave)
+        {
+            master->setupPDO(slave, CPdoMapping::mapMotorPDOs);
+        }
+        master->configMap();
+        master->configDC();
+        master->movetoState(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE);
+
+        /* connect struct pointers to slave I/O pointers */
+        for (int i = 0; i < NUMOF_DRIVE; ++i)
+        {
+            epos4_drive_pt[i].ptOutParam = (EPOS4_DRIVE_RxPDO_t*)(master->getOutput_slave(i + 1));
+            epos4_drive_pt[i].ptInParam = (EPOS4_DRIVE_TxPDO_t*)(master->getInput_slave(i + 1));
+        }
+        expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
+        // std::cout << "Calculated workcounter " << expectedWKC << std::endl;
+
+        master->sendAndReceive(EC_TIMEOUTRET);
+        master->config_ec_sync0(1, TRUE, DEADLINE, 0); // SYNC0 on slave 1
+
+        master->movetoState(0, EC_STATE_OPERATIONAL, 5 * EC_TIMEOUTSTATE);  // request OP state for all slaves
+        if (ec_slave[0].state == EC_STATE_OPERATIONAL)
+        {
+            std::cout << "Operational state reached for all slaves!\n\n";
+            inOP = true; // activate cyclic process
+
+            while (1)
+            {
+                sleep(1);
+            }
+        }
+        else
+        {
+            std::cout << "Not all slaves reached operational state.\n";
+
+            master->printState2();
+            for (int i = 0; i < NUMOF_DRIVE; i++)
+            {
+                master->config_ec_sync0(i + 1, FALSE, 0, 0);
+            }
+            inOP = false;
+        }
+
+        master->movetoState(0, EC_STATE_INIT, EC_TIMEOUTSTATE);
+        master->close_master();
     }
+
     else
     {
         ec_adaptert *adapter = NULL;
-        printf("Usage: main ifname\nifname = eth0 for example\n");
+        std::cout << "Usage: main ifname\nifname = eth0 for example\n";
 
-        printf("\nAvailable adapters:\n");
+        std::cout << "\nAvailable adapters:\n";
         adapter = ec_find_adapters();
-
         while (adapter != NULL)
         {
-            printf("    - %s  (%s)\n", adapter->name, adapter->desc);
+            std::cout << "    - " << adapter->name << "  (" << adapter->desc << ")\n";
             adapter = adapter->next;
         }
-
         ec_free_adapters(adapter);
     }
+    std::cout << "End program\n";
 
-    printf("End program\n");
     return (0);
 }

@@ -93,13 +93,11 @@ namespace ecat
 
     uint8 *CEcatMaster::getOutput_slave(uint16 position)
     {
-        //std::cout<<"outputs_master: "<<ec_slave[position].outputs<<"\n";
         return ec_slave[position].outputs;
     }
 
     uint8 *CEcatMaster::getInput_slave(uint16 position)
     {
-        //std::cout<<"inputs_master: "<<ec_slave[position].inputs<<"\n";
         return ec_slave[position].inputs;
     }
 
@@ -117,28 +115,43 @@ namespace ecat
     }
 
     //Print slave's state
-    void CEcatMaster::printState()
+    void CEcatMaster::printState1()
     {
-        int cnt;
+        for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
+        {
+            std::cout << "\nName: " << ec_slave[cnt].name << ", EEpMan: " << ec_slave[cnt].eep_man << ", eep_id: " << ec_slave[cnt].eep_id << std::endl;
+        }
+    }
+
+    //Print slave's state
+    void CEcatMaster::printState2()
+    {
         //read and put the state in ec_slave[]
         ec_readstate();
-        for (cnt = 1; cnt <= ec_slavecount; cnt++)
+        for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
         {
             printf("Slave:%d Name:%s Output size:%3dbits Input size:%3dbits State:%2d delay:%d.%d, StatusCode=0x%4.4x : %s \n",
-                   cnt, ec_slave[cnt].name, ec_slave[cnt].Obits, ec_slave[cnt].Ibits,
-                   ec_slave[cnt].state, (int)ec_slave[cnt].pdelay, ec_slave[cnt].hasdc,
-                   ec_slave[cnt].ALstatuscode, ec_ALstatuscode2string(ec_slave[cnt].ALstatuscode));
+                    cnt, ec_slave[cnt].name, ec_slave[cnt].Obits, ec_slave[cnt].Ibits,
+                    ec_slave[cnt].state, (int)ec_slave[cnt].pdelay, ec_slave[cnt].hasdc,
+                    ec_slave[cnt].ALstatuscode, ec_ALstatuscode2string(ec_slave[cnt].ALstatuscode));
         }
     }
 
     void CEcatMaster::close_master()
     {
-        //movetoState_broadcast(EC_STATE_SAFE_OP, 200000);
-        //movetoState_broadcast(EC_STATE_PRE_OP, 9000000);
-        // shutdown = false;
-        // thread = false;
         ec_close();
     }
+
+
+    // Setup slave
+    void CEcatMaster::setupPDO(int slave, int (*setup)(uint16 position))
+    {
+        ec_slave[slave].PO2SOconfig = setup;
+    }
+
+
+
+
 
 
 
@@ -263,35 +276,6 @@ namespace ecat
     //         ts->tv_nsec = nsec;
     //     }
     // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // //Setup slave
-    // void CEcatMaster::setupSlave(int slave, int (*setup)(uint16 position))
-    // {
-    //     //when the slave move from PRE_OP state to SAFE_OP state, it calls slave.setup to set parameters and map PDO
-    //     ec_slave[slave].PO2SOconfig = setup;
-    // }
-
-
-
-
-
-
-
-
-
 
 
 
