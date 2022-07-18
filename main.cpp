@@ -14,6 +14,8 @@
 #include "Macro.hpp"
 #include "CEcatMaster.hpp"
 
+#include "mytest.h"
+
 using namespace ecat;
 
 #define EC_TIMEOUTMON 500

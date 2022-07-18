@@ -1,5 +1,5 @@
 # cmake version
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.4)
 
 # compile options
 add_compile_options(-Wall -Wextra)
@@ -7,18 +7,20 @@ add_compile_options(-Wall -Wextra)
 # project information
 project(ex_robot)
 
-# SOEM package
+# SOEM, depthai package
 find_package(soem REQUIRED)
+find_package(depthai CONFIG REQUIRED)
+find_package(OpenCV REQUIRED)
 
 # include
 include_directories(RobotHand/include)
 include_directories(RobotHand/src)
-# include_directories(RobotCamera/include)
-# include_directories(RobotCamera/src)
+include_directories(RobotCamera/include)
+include_directories(RobotCamera/src)
 
 # reference directory
 add_subdirectory(RobotHand)
-# add_subdirectory(RobotCamera)
+add_subdirectory(RobotCamera)
 
 
 
@@ -27,4 +29,5 @@ add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         RobotHand
+        RobotCamera
     )

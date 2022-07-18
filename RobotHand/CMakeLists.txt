@@ -1,4 +1,4 @@
-# /src/RobotHand/CMakeLists.txt
+# /RobotHand/CMakeLists.txt
 
 set(OS_LIBS pthread m)
 
