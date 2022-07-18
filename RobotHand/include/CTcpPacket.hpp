@@ -1,5 +1,5 @@
-#ifndef CTCPPACKET_H_
-#define CTCPPACKET_H_
+#ifndef CTCPPACKET_HPP_
+#define CTCPPACKET_HPP_
 
 #include <string.h>
 #include <sys/socket.h>
@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "Macro.h"
+#include "Macro.hpp"
 
 class CTcpPacket
 {
@@ -44,4 +44,4 @@ private:
     int retval;
 };
 
-#endif /* CTCPPACKET_H_ */
+#endif  // CTCPPACKET_HPP_

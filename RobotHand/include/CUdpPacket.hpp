@@ -1,12 +1,12 @@
-#ifndef CUDPPACKET_H_
-#define CUDPPACKET_H_
+#ifndef CUDPPACKET_HPP_
+#define CUDPPACKET_HPP_
 
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <unistd.h>
-#include "Macro.h"
+#include "Macro.hpp"
 
 #define UDP_PORT 3000
 
@@ -36,4 +36,4 @@ private:
     unsigned char txBuffer[TX_BUFFER_SIZE];
 };
 
-#endif /* CUDPPACKET_H_ */
+#endif  // CUDPPACKET_HPP_

@@ -6,13 +6,13 @@
 #include <iostream>
 
 #include "ethercat.h"
-#include "ecatErrorHandle.h"
-#include "scheduling.h"
-#include "CPdoMapping.h"
-#include "CTcpPacket.h"
-#include "CUdpPacket.h"
-#include "Macro.h"
-#include "CEcatMaster.h"
+#include "ecatErrorHandle.hpp"
+#include "scheduling.hpp"
+#include "CPdoMapping.hpp"
+#include "CTcpPacket.hpp"
+#include "CUdpPacket.hpp"
+#include "Macro.hpp"
+#include "CEcatMaster.hpp"
 
 using namespace ecat;
 

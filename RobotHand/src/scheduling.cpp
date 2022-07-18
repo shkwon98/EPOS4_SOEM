@@ -1,4 +1,4 @@
-#include "scheduling.h"
+#include "scheduling.hpp"
 
 
 /* use pid=0 for the calling thread */

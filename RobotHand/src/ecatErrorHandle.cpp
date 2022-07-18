@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ecatErrorHandle.h"
+#include "ecatErrorHandle.hpp"
 
 #define EC_TIMEOUTMON 500
 

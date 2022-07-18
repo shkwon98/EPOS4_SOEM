@@ -27,7 +27,7 @@
 #ifdef __aarch64__
 #define __NR_sched_setattr      274
 #endif
-#endif 
+#endif
 
 /* __NR_sched_getattr number */
 #ifndef __NR_sched_getattr
@@ -43,7 +43,7 @@
 #define __NR_sched_getattr      381
 #endif
 
-#ifdef __aarch64__CPU_COUNT() 
+#ifdef __aarch64__CPU_COUNT()
 #define __NR_sched_getattr      275
 #endif
 #endif

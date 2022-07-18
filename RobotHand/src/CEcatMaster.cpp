@@ -1,4 +1,4 @@
-#include "CEcatMaster.h"
+#include "CEcatMaster.hpp"
 // #include <stdexcept>
 // #include <cstring>
 // #include <fstream>
@@ -15,7 +15,7 @@ namespace ecat
 
     CEcatMaster::~CEcatMaster() {}
 
-    //Initialise SOEM, bind socket to ifname
+    // Initialise SOEM, bind socket to ifname
     void CEcatMaster::initialize(char *ifname)
     {
         if (ec_init(ifname))
@@ -29,8 +29,8 @@ namespace ecat
         }
     }
 
-    //Configuration and initialization of slave
-    //return: number of slaves (0 if not slave)
+    // Configuration and initialization of slave
+    // return: number of slaves (0 if not slave)
     int CEcatMaster::config_init()
     {
         int slave_number = ec_config_init(FALSE);
@@ -48,22 +48,28 @@ namespace ecat
         }
     }
 
-    //Maps the previously mapped PDOs into the local buffer
+    // Setup slave
+    void CEcatMaster::setupPDO(int slave, int (*setup)(uint16 slaveIdx))
+    {
+        ec_slave[slave].PO2SOconfig = setup;
+    }
+
+    // Maps the previously mapped PDOs into the local buffer
     void CEcatMaster::configMap()
     {
         ec_config_map(&IOmap);
         std::cout << "\nSlaves mapped!\n";
     }
 
-    //Configurate distributed clock
+    // Configurate distributed clock
     bool CEcatMaster::configDC()
     {
         return ec_configdc();
     }
 
-    //Change slave's state
-    //Return: written state
-    uint16 CEcatMaster::movetoState(uint16 slave, int state, int timeout)
+    // Change slave's state
+    // Return: written state
+    uint16 CEcatMaster::movetoState(uint16 slave, uint16 state, int timeout)
     {
         ec_slave[slave].state = state;
         ec_writestate(slave);
@@ -91,14 +97,14 @@ namespace ecat
         return state_check;
     }
 
-    uint8 *CEcatMaster::getOutput_slave(uint16 position)
+    uint8 *CEcatMaster::getOutput_slave(uint16 slave)
     {
-        return ec_slave[position].outputs;
+        return ec_slave[slave].outputs;
     }
 
-    uint8 *CEcatMaster::getInput_slave(uint16 position)
+    uint8 *CEcatMaster::getInput_slave(uint16 slave)
     {
-        return ec_slave[position].inputs;
+        return ec_slave[slave].inputs;
     }
 
     // send one valid process data to make outputs in slaves happy
@@ -108,13 +114,13 @@ namespace ecat
         ec_receive_processdata(timeout);
     }
 
-    //Call ec_dcsync0() to synchronize the slave and master clock
-    void CEcatMaster::config_ec_sync0(uint16 position, bool activate, uint32 cycletime, int cycleshift)
+    // Call ec_dcsync0() to synchronize the slave and master clock
+    void CEcatMaster::config_ec_sync0(uint16 slave, bool activate, uint32 cycletime, int cycleshift)
     {
-        ec_dcsync0(position, activate, cycletime, cycleshift);
+        ec_dcsync0(slave, activate, cycletime, cycleshift);
     }
 
-    //Print slave's state
+    // Print slave's state
     void CEcatMaster::printState1()
     {
         for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
@@ -123,10 +129,10 @@ namespace ecat
         }
     }
 
-    //Print slave's state
+    // Print slave's state
     void CEcatMaster::printState2()
     {
-        //read and put the state in ec_slave[]
+        // read and put the state in ec_slave[]
         ec_readstate();
         for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
         {
@@ -140,13 +146,6 @@ namespace ecat
     void CEcatMaster::close_master()
     {
         ec_close();
-    }
-
-
-    // Setup slave
-    void CEcatMaster::setupPDO(int slave, int (*setup)(uint16 position))
-    {
-        ec_slave[slave].PO2SOconfig = setup;
     }
 
 
@@ -295,4 +294,4 @@ namespace ecat
 //         mtx.unlock();
 //     }
 
-}
+}  // namespace ecat

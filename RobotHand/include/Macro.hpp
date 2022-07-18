@@ -1,7 +1,7 @@
-#ifndef MACRO_H
-#define MACRO_H
+#ifndef __MACRO_HPP__
+#define __MACRO_HPP__
 
-#include "pdo_def.h"
+#include "pdo_def.hpp"
 
 #define TCP_PORT 2000
 #define UDP_PORT 3000
@@ -44,11 +44,11 @@ typedef struct
 
 typedef struct
 {
-    uint  timeStamp;
+    uint32 timeStamp;
 
-    int32 actualVelocity;
-    int16 actualTorque;
-    int32 actualPosition;
+    int32  actualVelocity;
+    int16  actualTorque;
+    int32  actualPosition;
 }LOG_DATA;
 #define LOG_DATA_SIZE sizeof(LOG_DATA)
 
@@ -74,13 +74,13 @@ typedef struct
 ////////////////////////////////////////////////////
 
 #define COMMAND_SET_TASK_PARAM             0X0000
-#define COMMAND_RUN_CSP                    0X0001 // Cyclic Synchronous Position Mode
+#define COMMAND_RUN_CSP                    0X0001  // Cyclic Synchronous Position Mode
 
-#define COMMAND_RUN_CSV                    0x0011 // Cyclic Synchronous Velocity Mode
+#define COMMAND_RUN_CSV                    0x0011  // Cyclic Synchronous Velocity Mode
 
-#define COMMAND_RUN_CST                    0x0021 // Cyclic Synchronous Torque Mode
+#define COMMAND_RUN_CST                    0x0021  // Cyclic Synchronous Torque Mode
 
-#define COMMAND_RUN_PPM                    0x0031 // Profile Position Mode
+#define COMMAND_RUN_PPM                    0x0031  // Profile Position Mode
 
 // #define COMMAND_MODE_STOP_MOTOR           0xFFFF
 
@@ -93,4 +93,4 @@ typedef struct
 #define STREAM_MODE            0x0001
 // #define
 
-#endif // MACRO_H
+#endif  // __MACRO_HPP__

@@ -1,8 +1,8 @@
-#ifndef __CECATMASTER_H__
-#define __CECATMASTER_H__
+#ifndef __CECATMASTER_HPP__
+#define __CECATMASTER_HPP__
 
-#include <iostream>
 #include <sys/mman.h>
+#include <iostream>
 // #include <thread>
 // #include <pthread.h>
 // #include <cstdlib>
@@ -41,9 +41,9 @@ namespace ecat
         /**
          * When the slave move from PRE_OP state to SAFE_OP state, it calls slave.setup to set parameters and map PDO.
          * @param int slave this is the position of the slave in the network.
-         * @param (int)(*setup)(uint16 x) this is a function pointer.
+         * @param (int)(*setup)(uint16 slaveIdx) this is a function pointer.
         */
-        void setupPDO(int slave, int (*setup)(uint16 position));
+        void setupPDO(int slave, int (*setup)(uint16 slaveIdx));
 
         /**
          * It configures the IOmap.
@@ -58,19 +58,19 @@ namespace ecat
 
         /**
          * Changes the status of a slave.
-         * @param int slave this is the position of the slave in the network.
+         * @param uint16 slave this is the position of the slave in the network.
          * @param uint16 state this is the state in which you want to move the slave.
          * @param int timeout
          * @return uint16 written state returns the state written by the master
         */
-        uint16 movetoState(uint16 slave, int state, int timeout);
+        uint16 movetoState(uint16 slave, uint16 state, int timeout);
 
-        uint8 *getOutput_slave(uint16 position);
-        uint8 *getInput_slave(uint16 position);
+        uint8 *getOutput_slave(uint16 slave);
+        uint8 *getInput_slave(uint16 slave);
 
         void sendAndReceive(int timeout);
 
-        void config_ec_sync0(uint16 position, bool activate, uint32 cycletime, int cycleshift);
+        void config_ec_sync0(uint16 slave, bool activate, uint32 cycletime, int cycleshift);
 
         void printState1();
         void printState2();
@@ -125,8 +125,7 @@ namespace ecat
         // void add_timespec(struct timespec *ts, int64 addtime);
         // std::thread control_thread;
         // std::mutex mtx;
-
     };
-}
+}  // namespace ecat
 
-#endif // __CECATMASTER_H__
+#endif  // __CECATMASTER_HPP__

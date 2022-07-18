@@ -1,4 +1,4 @@
-#include "CUdpPacket.h"
+#include "CUdpPacket.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

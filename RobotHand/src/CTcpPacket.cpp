@@ -1,4 +1,4 @@
-#include "CTcpPacket.h"
+#include "CTcpPacket.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

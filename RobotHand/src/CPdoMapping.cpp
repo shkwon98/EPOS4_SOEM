@@ -1,4 +1,4 @@
-#include "CPdoMapping.h"
+#include "CPdoMapping.hpp"
 
 namespace ecat
 {
@@ -7,25 +7,25 @@ namespace ecat
 
     /** SOEM wrapper for ec_SDOwrite().
      *
-     * @param slave     = Slave index.
+     * @param slaveIdx     = Slave index.
      * @param index     = SDO index.
      * @param subindex  = SDO sub-index.
      * @param value     = Output value.
      * @return working counter.
      */
-    int CPdoMapping::SDO_write8(uint16 slave, uint16 index, uint8 subindex, uint8 value)
+    int CPdoMapping::SDO_write8(uint16 slaveIdx, uint16 index, uint8 subindex, uint8 value)
     {
-        retVal = ec_SDOwrite(slave, index, subindex, FALSE, sizeof(value), &value, EC_TIMEOUTSAFE);
+        retVal = ec_SDOwrite(slaveIdx, index, subindex, FALSE, sizeof(value), &value, EC_TIMEOUTSAFE);
         return retVal;
     }
-    int CPdoMapping::SDO_write16(uint16 slave, uint16 index, uint8 subindex, uint16 value)
+    int CPdoMapping::SDO_write16(uint16 slaveIdx, uint16 index, uint8 subindex, uint16 value)
     {
-        retVal = ec_SDOwrite(slave, index, subindex, FALSE, sizeof(value), &value, EC_TIMEOUTSAFE);
+        retVal = ec_SDOwrite(slaveIdx, index, subindex, FALSE, sizeof(value), &value, EC_TIMEOUTSAFE);
         return retVal;
     }
-    int CPdoMapping::SDO_write32(uint16 slave, uint16 index, uint8 subindex, uint32 value)
+    int CPdoMapping::SDO_write32(uint16 slaveIdx, uint16 index, uint8 subindex, uint32 value)
     {
-        retVal = ec_SDOwrite(slave, index, subindex, FALSE, sizeof(value), &value, EC_TIMEOUTSAFE);
+        retVal = ec_SDOwrite(slaveIdx, index, subindex, FALSE, sizeof(value), &value, EC_TIMEOUTSAFE);
         return retVal;
     }
 
@@ -101,4 +101,4 @@ namespace ecat
 
         return 0;
     }
-}
+}  // namespace ecat

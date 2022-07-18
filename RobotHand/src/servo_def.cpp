@@ -4,7 +4,7 @@
 * Return value : drive has been in Operation or not
 */
 
-#include "servo_def.h"
+#include "servo_def.hpp"
 
 int ServoOn_GetCtrlWrd(uint16 StatusWord, uint16 * ControlWord)
 {
