@@ -7,27 +7,23 @@ add_compile_options(-Wall -Wextra)
 # project information
 project(ex_robot)
 
-# SOEM, depthai package
+# open-source packages
 find_package(soem REQUIRED)
-find_package(depthai CONFIG REQUIRED)
-find_package(OpenCV REQUIRED)
+# find_package(depthai CONFIG REQUIRED)
+# find_package(OpenCV REQUIRED)
 
-# include
-include_directories(RobotHand/include)
-include_directories(RobotHand/src)
-include_directories(RobotCamera/include)
-include_directories(RobotCamera/src)
+# reference directories
+add_subdirectory(ansur_control)
+add_subdirectory(ansur_ethercat_config)
+add_subdirectory(ansur_scheduling_config)
+add_subdirectory(ansur_socket_config)
+add_subdirectory(ansur_thread_config)
+# add_subdirectory(RobotCamera)
 
-# reference directory
-add_subdirectory(RobotHand)
-add_subdirectory(RobotCamera)
-
-
-
-# adding the executable file & linking library
+# adding the executable files & linking libraries
 add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC
-        RobotHand
-        RobotCamera
+        ethercat_config
+        control
+        # RobotCamera
     )

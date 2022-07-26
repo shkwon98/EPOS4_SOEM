@@ -2,6 +2,7 @@
 #define _GNU_SOURCE1
 
 #include <sys/syscall.h>
+#include <sys/mman.h>
 #include <linux/sched.h>
 #include <sys/types.h>
 #include <linux/kernel.h>

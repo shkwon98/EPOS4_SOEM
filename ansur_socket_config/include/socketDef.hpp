@@ -1,7 +1,7 @@
-#ifndef __MACRO_HPP__
-#define __MACRO_HPP__
+#ifndef SOCKETDEF_HPP
+#define SOCKETDEF_HPP
 
-#include "pdo_def.hpp"
+#include "ethercat.h"
 
 #define TCP_PORT 2000
 #define UDP_PORT 3000
@@ -93,4 +93,4 @@ typedef struct
 #define STREAM_MODE            0x0001
 // #define
 
-#endif  // __MACRO_HPP__
+#endif // SOCKETDEF_HPP

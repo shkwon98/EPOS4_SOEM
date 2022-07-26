@@ -1,9 +1,42 @@
-#include "CEcatMaster.hpp"
-// #include <stdexcept>
-// #include <cstring>
-// #include <fstream>
+#include "CEcatCommand.hpp"
 
-// #define NSEC_PER_SEC 1000000000
+int servo_enable(uint16 StatusWord, uint16 * ControlWord)
+{
+    int  _enable = 0;
+    if (bit_is_clear(StatusWord, STATUSWORD_OPERATION_ENABLE_BIT)) //Not ENABLED yet
+    {
+        if (bit_is_clear(StatusWord, STATUSWORD_SWITCHED_ON_BIT)) //Not SWITCHED ON yet
+        {
+            if (bit_is_clear(StatusWord, STATUSWORD_READY_TO_SWITCH_ON_BIT)) //Not READY to SWITCH ON yet
+            {
+                if (bit_is_set(StatusWord, STATUSWORD_FAULT_BIT)) //FAULT exist
+                {
+                    (*ControlWord) = 0x80;	//FAULT RESET command
+                }
+                else //NO FAULT
+                {
+                    (*ControlWord) = 0x06;	//SHUTDOWN command (transition#2)
+                }
+            }
+            else //READY to SWITCH ON
+            {
+                (*ControlWord) = 0x07;	//SWITCH ON command (transition#3)
+            }
+        }
+        else //has been SWITCHED ON
+        {
+            (*ControlWord) = 0x0F;	//ENABLE OPERATION command (transition#4)
+            _enable = 1;
+        }
+    }
+    else //has been ENABLED
+    {
+        (*ControlWord) = 0x0F;	//maintain OPERATION state
+        _enable = 1;
+    }
+    return _enable;;
+}
+
 
 namespace ecat
 {
@@ -97,14 +130,14 @@ namespace ecat
         return state_check;
     }
 
-    uint8 *CEcatMaster::getOutput_slave(uint16 slave)
+    /* connect struct pointers to slave I/O pointers */
+    void CEcatMaster::map_structs(SERVO_IO_pt servo[], int num_of_servos)
     {
-        return ec_slave[slave].outputs;
-    }
-
-    uint8 *CEcatMaster::getInput_slave(uint16 slave)
-    {
-        return ec_slave[slave].inputs;
+        for (int i = 0; i < num_of_servos; ++i)
+        {
+            servo[i].writeParam = (SERVO_WRITE*)(ec_slave[i + 1].outputs);
+            servo[i].readParam = (SERVO_READ*)(ec_slave[i + 1].inputs);
+        }
     }
 
     // send one valid process data to make outputs in slaves happy

@@ -1,16 +1,42 @@
-#include <stdio.h>
 #include "ecatErrorHandle.hpp"
 
 #define EC_TIMEOUTMON 500
+#define cycletime 1000000  // ns
 
-int expectedWKC;
-volatile int wkc;
-uint8 currentgroup = 0;
+static uint8 currentgroup = 0;
+static int wkc;
+volatile extern int expectedWKC;
+volatile extern bool inOP;
 
+extern pthread_mutex_t mtx_IOMap;
 
-OSAL_THREAD_FUNC errorHandle()
+OSAL_THREAD_FUNC_RT sync_thread()
 {
-    while (1)
+    struct timespec next_time;
+    clock_gettime(CLOCK_MONOTONIC, &next_time);
+    while (inOP)
+    {
+        pthread_mutex_lock(&mtx_IOMap);
+        ec_send_processdata();
+        wkc = ec_receive_processdata(EC_TIMEOUTRET);
+        // if (elmo_is_error())
+        // {
+        //     // pthread_mutex_unlock(&mtx_IOMap);
+        //     elmo_set_state(EC_STATE_PRE_OP);
+        //     ec_close();
+        //     exit(EXIT_FAILURE);
+        // }
+        pthread_mutex_unlock(&mtx_IOMap);
+
+        next_time.tv_sec += (next_time.tv_nsec + cycletime) / 1e9;
+        next_time.tv_nsec = (int)(next_time.tv_nsec + cycletime) % (int)1e9;
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_time, NULL);
+    }
+}
+
+OSAL_THREAD_FUNC ecatCheck()
+{
+    while (inOP)
     {
         if ((wkc < expectedWKC) || ec_group[currentgroup].docheckstate)
         {
