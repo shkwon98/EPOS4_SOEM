@@ -3,17 +3,7 @@
 
 #include <sys/mman.h>
 #include <iostream>
-// #include <thread>
-// #include <pthread.h>
-// #include <cstdlib>
-// #include <sys/time.h>
-// #include <unistd.h>
-// #include <sched.h>
-// #include <time.h>
-// #include <mutex>
 #include "ethercat.h"
-// #include "scheduling.h"
-
 
 #define _BV(bit)                (1 << (bit))
 #define bit_is_set(val, bit)    (val & _BV(bit))
@@ -188,51 +178,9 @@ namespace ecat
         */
         void close_master();
 
-
-        // /**
-        //  * Creates the real-time thread for the cyclical exchange of ethercat package.
-        //  * It sends the buffer IOmap every 'cycletime'
-        //  * @param int timeout
-        //  * @param int64 cycletime this is the time of cycle to send ethercat package.
-        // */
-        // void createThread(int64 cycleTime);
-
-        // /**
-        //  * It sets the time of cycle used by a real-time thread to exchange ethercat package thorow IOmap buffer.
-        //  * @param uint64 cycletime this is the time of cycle to send ethercat package.
-        // */
-        // void setCycle(int64 cycletime);
-
-
-        // void waitThread();
-
-        // /**
-        //  * Each slave has to call this method to access the IObuffer.
-        // */
-        // void mutex_down();
-
-        // /**
-        //  * Each slave has to call this method to release the IObuffer.
-        // */
-        // void mutex_up();
-
     private:
         char IOmap[4096]; /**< Buffer used by all slaves to write and read data */
-        // pthread_t tidm;
-        // bool thread = false;
-        // int64 cycletime;
-        // int64 toff;
-        // bool shutdown = true;
-        // int i = 0;
-        // long int time1;
-        // long int time2;
-        // std::array<long int, 50000> timecycle;
-        // long int cycle;
-        // void ec_sync(int64 reftime, int64 cycletime, int64 *offsettime);
-        // void ecatthread();
-        // void add_timespec(struct timespec *ts, int64 addtime);
-        // std::thread control_thread;
-        // std::mutex mtx;
+
     };
 }  // namespace ecat
 

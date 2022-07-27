@@ -19,18 +19,15 @@ using namespace ecat;
 
 
 #define NUMOF_EPOS4 1
-#define CONTROL_PERIOD 1000.0  // us
-#define cycletime 1000000  // ns
-#define NSEC_PER_SEC 1000000000
 
 static OSAL_THREAD_HANDLE thread0;
 static OSAL_THREAD_HANDLE thread1;
 static OSAL_THREAD_HANDLE thread2;
+
 volatile int expectedWKC;
 volatile bool inOP = false;
 
 SERVO_IO_pt EPOS4[NUMOF_EPOS4];
-int64 toff = 0;
 bool bRunStart = false;
 short mode;
 INPUT_LIST input;
@@ -109,7 +106,7 @@ int main(int argc, char *argv[])
         // std::cout << "Calculated workcounter " << expectedWKC << std::endl;
 
         master->sendAndReceive(EC_TIMEOUTRET);
-        master->config_ec_sync0(1, TRUE, cycletime, 0); // SYNC0 on slave 1
+        master->config_ec_sync0(1, TRUE, CONTROL_PERIOD_IN_ns, 0); // SYNC0 on slave 1
 
         master->movetoState(0, EC_STATE_OPERATIONAL, 5 * EC_TIMEOUTSTATE);
         if (ec_slave[0].state == EC_STATE_OPERATIONAL)
@@ -123,14 +120,14 @@ int main(int argc, char *argv[])
             CControlThread* epos4;
             epos4 = new CControlThread();
 
-            epos4->rtLoopStart(cycletime);
-            // printf("12345\n");
+            epos4->rtLoopStart(CONTROL_PERIOD_IN_ns);
 
             while (1)
             {
                 sleep(1);
             }
 
+            inOP = false;
             delete epos4;
         }
         else
@@ -142,7 +139,6 @@ int main(int argc, char *argv[])
             {
                 master->config_ec_sync0(i + 1, FALSE, 0, 0);
             }
-            inOP = false;
         }
 
         master->movetoState(0, EC_STATE_INIT, EC_TIMEOUTSTATE);
@@ -153,9 +149,7 @@ int main(int argc, char *argv[])
     else
     {
         ec_adaptert *adapter = NULL;
-        std::cout << "Usage: main ifname\nifname = eth0 for example\n";
-
-        std::cout << "\nAvailable adapters:\n";
+        std::cout << "Usage: main ifname\nifname = eth0 for example\n\nAvailable adapters:\n";
         adapter = ec_find_adapters();
         while (adapter != NULL)
         {

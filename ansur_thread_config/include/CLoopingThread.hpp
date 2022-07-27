@@ -6,7 +6,6 @@
 #include "scheduling.hpp"
 
 #define NSEC_PER_SEC 1000000000
-#define CONTROL_PERIOD 1000.0 // us
 
 class CLoopingThread
 {
@@ -14,26 +13,27 @@ public:
     CLoopingThread();
     virtual ~CLoopingThread();
 
-    void add_timespec(struct timespec *ts, int64_t addtime);
-    void rtLoopSet(int64_t cycletime);
-    bool rtLoopStart(int64_t cycletime);
     bool loopStart();
-    bool stop();
-    bool isActive();
+    bool rtLoopStart(int64_t period);
+
+    bool loopStop();
+    bool rtLoopStop();
+
 
 protected:
     virtual bool task() = 0;
-    int64_t cycletime;
-    int64_t toff = 0;
+    int64_t m_period;
+    int64_t toff;
+
 
 private:
-    bool m_isActive;
     std::thread m_thread;
-
-    struct timespec next_time;
+    bool m_isActive;
     struct timespec real_time, last_time;
-    double run_time;
+    double task_time, loop_time;
 
+    void add_timespec(struct timespec *ts, int64_t addtime);
+    void rtLoopSet(int64_t period);
 };
 
 #endif // CLOOPINGTHREAD_HPP

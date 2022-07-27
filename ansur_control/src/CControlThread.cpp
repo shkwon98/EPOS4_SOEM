@@ -96,7 +96,7 @@ bool CControlThread::task()
 
             case RUN_TASK_MOTOR_CONTROL:
             {
-                double dTriPeriod = (2 * M_PI) / (input.taskParam.period * CONTROL_PERIOD);
+                double dTriPeriod = (2 * M_PI) * CONTROL_PERIOD_IN_s / (input.taskParam.period);
                 tarPos = input.taskParam.disp * sin(dTriPeriod * tick++);
                 break;
             }
@@ -167,7 +167,7 @@ bool CControlThread::task()
     if (ec_slave[0].hasdc)
     {
         /* calculate toff to get linux time and DC synced */
-        ec_sync(ec_DCtime, cycletime, &toff);
+        ec_sync(ec_DCtime, m_period, &toff);
     }
 
     return 0;

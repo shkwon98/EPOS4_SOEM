@@ -10,6 +10,11 @@
 
 #define NUMOF_EPOS4 1
 
+#define CONTROL_PERIOD_IN_ms  ( 1.0 )  // ms
+#define CONTROL_PERIOD_IN_s   ( 1e-03 * CONTROL_PERIOD_IN_ms )
+#define CONTROL_PERIOD_IN_us  ( 1e03 * CONTROL_PERIOD_IN_ms )
+#define CONTROL_PERIOD_IN_ns  ( 1e06 * CONTROL_PERIOD_IN_ms )
+
 class CControlThread: public CLoopingThread
 {
 public:
@@ -30,7 +35,7 @@ private:
 
     int started[NUMOF_EPOS4] = { 0 };
 
-    void ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime);
+    void ec_sync(int64 refTime, int64 period, int64 *offsetTime);
     double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
     int servo_enable(uint16 StatusWord, uint16 *ControlWord);
 };
