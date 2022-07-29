@@ -77,4 +77,5 @@ void sched_deadline(struct sched_attr *attr, long unsigned int runtime, long uns
 void sched_rr(struct sched_attr *attr, unsigned int priority, long unsigned int flags);
 void sched_fifo(struct sched_attr *attr, unsigned int priority, long unsigned int flags);
 void sched_normal(struct sched_attr *attr, int nice, long unsigned int flags);
+
 #endif

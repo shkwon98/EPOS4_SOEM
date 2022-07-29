@@ -9,7 +9,6 @@
 #include "scheduling.hpp"
 #include "CPdoMapping.hpp"
 #include "CTcpPacket.hpp"
-// #include "CUdpPacket.hpp"
 #include "socketDef.hpp"
 #include "CEcatCommand.hpp"
 #include "CControlThread.hpp"

@@ -16,7 +16,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME}
     ${OS_LIBS}
     soem
-    scheduling_config
     socket_config
-    thread_config
     )

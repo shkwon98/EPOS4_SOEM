@@ -60,6 +60,7 @@
         "set": "cpp",
         "string": "cpp",
         "iomanip": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "cerrno": "cpp"
     }
 }

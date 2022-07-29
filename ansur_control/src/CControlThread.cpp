@@ -164,10 +164,10 @@ bool CControlThread::task()
     udpPacket->encode(logData);
     udpPacket->sendPacket();
 
-    if (ec_slave[0].hasdc)
+    if (ec_slave[0].hasdc)  /* calculate toff to get linux time and DC synced */
     {
-        /* calculate toff to get linux time and DC synced */
         ec_sync(ec_DCtime, m_period, &toff);
+        m_addtime = m_period + toff;
     }
 
     return 0;

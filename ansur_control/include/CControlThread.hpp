@@ -25,6 +25,8 @@ protected:
     virtual bool task() override;
 
 private:
+    int64_t toff = 0;
+
     CUdpPacket* udpPacket;
 
     unsigned int tick = 0;

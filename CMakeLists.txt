@@ -15,7 +15,6 @@ find_package(soem REQUIRED)
 # reference directories
 add_subdirectory(ansur_control)
 add_subdirectory(ansur_ethercat_config)
-add_subdirectory(ansur_scheduling_config)
 add_subdirectory(ansur_socket_config)
 add_subdirectory(ansur_thread_config)
 # add_subdirectory(RobotCamera)
