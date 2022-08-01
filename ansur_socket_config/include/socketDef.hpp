@@ -1,8 +1,6 @@
 #ifndef SOCKETDEF_HPP
 #define SOCKETDEF_HPP
 
-#include "ethercat.h"
-
 #define TCP_PORT 2000
 #define UDP_PORT 3000
 #define GUI_PC_IP "192.168.0.9"
@@ -21,12 +19,12 @@ typedef enum
 
 typedef struct
 {
-    int32   taskType;
-    int32   taskMotion;
+    int32_t taskType;
+    int32_t taskMotion;
 
-    float32 disp;
-    float32 period;
-    int32   repeat;
+    float   disp;
+    float   period;
+    int32_t repeat;
 
     // unsigned int numRun;
 
@@ -36,19 +34,19 @@ typedef struct
 
 typedef struct
 {
-    int16      torque;
-    int32      velocity;
-    int32      position;
-    TASK_PARAM taskParam;
+    int16_t     torque;
+    int32_t     velocity;
+    int32_t     position;
+    TASK_PARAM  taskParam;
 }INPUT_LIST;
 
 typedef struct
 {
-    uint32 timeStamp;
+    uint32_t timeStamp;
 
-    int32  actualVelocity;
-    int16  actualTorque;
-    int32  actualPosition;
+    int32_t  actualVelocity;
+    int16_t  actualTorque;
+    int32_t  actualPosition;
 }LOG_DATA;
 #define LOG_DATA_SIZE sizeof(LOG_DATA)
 

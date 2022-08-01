@@ -35,15 +35,19 @@ uint8 txPDOSize = sizeof(txPDOObjects) / sizeof(txPDOObjects[0]);
 
 const char* ifname;
 
-void soem_thread(void *ptr)
-{
-    PI_data->PI_LX_direction = POSITIVE;
-    PI_data->PI_LY_direction = NEGATIVE;
-    PI_data->PI_RX_direction = NEGATIVE;
-    PI_data->PI_RY_direction = POSITIVE;
 
-    if (SOEM::initializeEtherCAT(ifname))
+int main(int argc, char *argv[])
+{
+    pthread_t ecatcheckth;
+    pthread_create(&ecatcheckth, NULL, &SOEM::ecatcheck, (void*)&ctime);
+
+    signal(SIGINT, signalCallbackLogger);
+
+    if (argc > 1)
     {
+        ifname = argv[1];
+        SOEM::initializeEtherCAT(ifname);
+
         // EPOS4 Object Generation
         EPOS4 DISK_Left = EPOS4((char*)CARRI_A_M1, CCW, REVOLUTE, ENCODER_ON_GEAR, REVOLUTE, 262144);
         EPOS4 DISK_Right = EPOS4((char*)CARRI_B_M1, CW, REVOLUTE, ENCODER_ON_GEAR, REVOLUTE, 262144);
@@ -150,28 +154,8 @@ void soem_thread(void *ptr)
             }
         }
     }
-}
 
-int main(int argc, char *argv[])
-{
-    pthread_t ecatcheckth;
-    pthread_create(&ecatcheckth, NULL, &SOEM::ecatcheck, (void*)&ctime);
-
-    signal(SIGINT, signalCallbackLogger);
-
-    if (argc > 1) ifname = argv[1];
-
-    else
-    {
-        printf("Usage: simple_test ifname1\nifname = eth0 for example\nEnd program\n");
-        return 0;
-    }
-
-    rt_task_create(&soem_test_task, "SOEM_Native", 0, 99, 0);
-    rt_task_start(&soem_test_task, &soem_thread, NULL);
-
-    while (1) {}
-
+    else { std::cout << "Usage: main ifname\nifname = eth0 for example\n"; }
     printf("End program\n");
     return 0;
 }

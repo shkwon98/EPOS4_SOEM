@@ -3,17 +3,11 @@
 
 #include <iostream>
 #include <math.h>
-#include "CLoopingThread.hpp"
-#include "CUdpPacket.hpp"
+#include "ecatDef.hpp"
 #include "socketDef.hpp"
-#include "CEcatCommand.hpp"
+#include "CUdpPacket.hpp"
+#include "CLoopingThread.hpp"
 
-#define NUMOF_EPOS4 1
-
-#define CONTROL_PERIOD_IN_ms  ( 1.0 )  // ms
-#define CONTROL_PERIOD_IN_s   ( 1e-03 * CONTROL_PERIOD_IN_ms )
-#define CONTROL_PERIOD_IN_us  ( 1e03 * CONTROL_PERIOD_IN_ms )
-#define CONTROL_PERIOD_IN_ns  ( 1e06 * CONTROL_PERIOD_IN_ms )
 
 class CControlThread: public CLoopingThread
 {
@@ -35,11 +29,21 @@ private:
     bool bEndFlag = true;
     double endCnt = 0;
 
-    int started[NUMOF_EPOS4] = { 0 };
+    int started[EPOS4_NUM] = { 0 };
 
-    void ec_sync(int64 refTime, int64 period, int64 *offsetTime);
+    void ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
+    {
+        static int64 integral = 0;
+        int64 delta;
+
+        delta = (refTime) % cycleTime;
+        if (delta > (cycleTime / 2)) { delta = delta - cycleTime; }
+        if (delta > 0) { integral++; }
+        if (delta < 0) { integral--; }
+        *offsetTime = -(delta / 100) - (integral / 20);
+    }
+
     double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
-    int servo_enable(uint16 StatusWord, uint16 *ControlWord);
 };
 
 #endif // CCONTROLTHREAD_HPP

@@ -5,22 +5,20 @@
 #include <stdlib.h>
 #include "ethercat.h"
 
-namespace ecat
+
+class CPdoMapping
 {
-    class CPdoMapping
-    {
-    public:
-        static int mapMotorPDOs(uint16 slaveIdx);
-        static int initMotor(uint16 slaveIdx);
+public:
+    static int mapMotorPDOs(uint16 slaveIdx);
+    static int initMotor(uint16 slaveIdx);
 
-    private:
-        static int wkc;
-        static int retVal;
+private:
+    static int wkc;
+    static int retVal;
 
-        static int SDO_write8(uint16 slaveIdx, uint16 index, uint8 subindex, uint8 value);
-        static int SDO_write16(uint16 slaveIdx, uint16 index, uint8 subindex, uint16 value);
-        static int SDO_write32(uint16 slaveIdx, uint16 index, uint8 subindex, uint32 value);
-    };
-}  // namespace ecat
+    static int SDO_write8(uint16 slaveIdx, uint16 index, uint8 subindex, uint8 value);
+    static int SDO_write16(uint16 slaveIdx, uint16 index, uint8 subindex, uint16 value);
+    static int SDO_write32(uint16 slaveIdx, uint16 index, uint8 subindex, uint32 value);
+};
 
 #endif  // __CPDOMAPPING_HPP__
