@@ -1,7 +1,4 @@
-#include "CTcpPacket.h"
-
-#include <stdio.h>
-#include <stdlib.h>
+#include "CTcpPacket.hpp"
 
 CTcpPacket::CTcpPacket()
 {
@@ -63,7 +60,7 @@ int CTcpPacket::readPacket()
     else if (retval == 0)
     {
         perror("\n----- Socket close -----");
-        exit(1);
+        isRemoteON = false;
     }
     else    // Packet Process
     {

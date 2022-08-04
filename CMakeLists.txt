@@ -1,31 +1,28 @@
-cmake_minimum_required(VERSION 2.8)
-project(robot_hand)
+# cmake version
+cmake_minimum_required(VERSION 3.4)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
-set(CMAKE_POSITION_INDEPENDENT_CODE true)
-set(OS_LIBS pthread m)
+# compile options
+add_compile_options(-Wall -Wextra)
 
-# SOEM
-find_package(soem)
+# project information
+project(ex_robot)
 
-# Add the headers from the <include> directory
-include_directories(include/${PROJECT_NAME})
-include_directories(src/${PROJECT_NAME})
+# open-source packages
+find_package(soem REQUIRED)
+# find_package(depthai CONFIG REQUIRED)
+# find_package(OpenCV REQUIRED)
 
-# Add the source files from the <src> directory
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+# reference directories
+add_subdirectory(ansur_control)
+add_subdirectory(ansur_ethercat)
+add_subdirectory(ansur_socket)
+add_subdirectory(ansur_thread)
+# add_subdirectory(RobotCamera)
+
+# adding the executable files & linking libraries
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME}
+        ansur_ethercat
+        ansur_control
+        # RobotCamera
     )
-
-add_library(${PROJECT_NAME}_src ${SRC_FILES})
-
-target_link_libraries(${PROJECT_NAME}_src soem ${OS_LIBS})
-
-# Add the executable files
-add_executable(${PROJECT_NAME}_test src/${PROJECT_NAME}/main.cpp)
-# Linking for libraries
-target_link_libraries(${PROJECT_NAME}_test
-        ${PROJECT_NAME}_src
-        soem
-        ${OS_LIBS}
-        )

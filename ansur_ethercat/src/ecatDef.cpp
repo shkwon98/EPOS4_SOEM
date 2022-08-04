@@ -1,12 +1,6 @@
-/*
-* Input: current status word read from servo drive
-* Output : next control word or command will be sent to servo drive in next cycle
-* Return value : drive has been in Operation or not
-*/
+#include "ecatDef.hpp"
 
-#include "servo_def.h"
-
-int ServoOn_GetCtrlWrd(uint16 StatusWord, uint16 * ControlWord)
+int servo_enable(uint16 StatusWord, uint16 * ControlWord)
 {
     int  _enable = 0;
     if (bit_is_clear(StatusWord, STATUSWORD_OPERATION_ENABLE_BIT)) //Not ENABLED yet
@@ -17,28 +11,29 @@ int ServoOn_GetCtrlWrd(uint16 StatusWord, uint16 * ControlWord)
             {
                 if (bit_is_set(StatusWord, STATUSWORD_FAULT_BIT)) //FAULT exist
                 {
-                    (*ControlWord) = 0x80;	//FAULT RESET command
+                    (*ControlWord) = CONTROL_COMMAND_FAULT_RESET;	//FAULT RESET command
                 }
                 else //NO FAULT
                 {
-                    (*ControlWord) = 0x06;	//SHUTDOWN command (transition#2)
+                    (*ControlWord) = CONTROL_COMMAND_SHUTDOWN;	//SHUTDOWN command (transition#2)
                 }
             }
             else //READY to SWITCH ON
             {
-                (*ControlWord) = 0x07;	//SWITCH ON command (transition#3)
+                (*ControlWord) = CONTROL_COMMAND_SWITCH_ON;	//SWITCH ON command (transition#3)
             }
         }
         else //has been SWITCHED ON
         {
-            (*ControlWord) = 0x0F;	//ENABLE OPERATION command (transition#4)
+            (*ControlWord) = CONTROL_COMMAND_SWITCH_ON_ENABLE_OPERATION;	//ENABLE OPERATION command (transition#4)
             _enable = 1;
         }
     }
     else //has been ENABLED
     {
-        (*ControlWord) = 0x0F;	//maintain OPERATION state
+        (*ControlWord) = CONTROL_COMMAND_ENABLE_OPERATION;	//maintain OPERATION state
         _enable = 1;
     }
     return _enable;;
 }
+

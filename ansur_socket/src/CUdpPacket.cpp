@@ -1,7 +1,4 @@
-#include "CUdpPacket.h"
-
-#include <stdio.h>
-#include <stdlib.h>
+#include "CUdpPacket.hpp"
 
 CUdpPacket::CUdpPacket()
 {

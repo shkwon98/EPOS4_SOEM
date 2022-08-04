@@ -1,7 +1,5 @@
-#ifndef MACRO_H
-#define MACRO_H
-
-#include "pdo_def.h"
+#ifndef SOCKETDEF_HPP
+#define SOCKETDEF_HPP
 
 #define TCP_PORT 2000
 #define UDP_PORT 3000
@@ -21,12 +19,12 @@ typedef enum
 
 typedef struct
 {
-    int32   taskType;
-    int32   taskMotion;
+    int32_t taskType;
+    int32_t taskMotion;
 
-    float32 disp;
-    float32 period;
-    int32   repeat;
+    float   disp;
+    float   period;
+    int32_t repeat;
 
     // unsigned int numRun;
 
@@ -36,19 +34,19 @@ typedef struct
 
 typedef struct
 {
-    int16      torque;
-    int32      velocity;
-    int32      position;
-    TASK_PARAM taskParam;
+    int16_t     torque;
+    int32_t     velocity;
+    int32_t     position;
+    TASK_PARAM  taskParam;
 }INPUT_LIST;
 
 typedef struct
 {
-    uint  timeStamp;
+    uint32_t timeStamp;
 
-    int32 actualVelocity;
-    int16 actualTorque;
-    int32 actualPosition;
+    int32_t  actualVelocity;
+    int16_t  actualTorque;
+    int32_t  actualPosition;
 }LOG_DATA;
 #define LOG_DATA_SIZE sizeof(LOG_DATA)
 
@@ -74,13 +72,13 @@ typedef struct
 ////////////////////////////////////////////////////
 
 #define COMMAND_SET_TASK_PARAM             0X0000
-#define COMMAND_RUN_CSP                    0X0001 // Cyclic Synchronous Position Mode
+#define COMMAND_RUN_CSP                    0X0001  // Cyclic Synchronous Position Mode
 
-#define COMMAND_RUN_CSV                    0x0011 // Cyclic Synchronous Velocity Mode
+#define COMMAND_RUN_CSV                    0x0011  // Cyclic Synchronous Velocity Mode
 
-#define COMMAND_RUN_CST                    0x0021 // Cyclic Synchronous Torque Mode
+#define COMMAND_RUN_CST                    0x0021  // Cyclic Synchronous Torque Mode
 
-#define COMMAND_RUN_PPM                    0x0031 // Profile Position Mode
+#define COMMAND_RUN_PPM                    0x0031  // Profile Position Mode
 
 // #define COMMAND_MODE_STOP_MOTOR           0xFFFF
 
@@ -93,4 +91,4 @@ typedef struct
 #define STREAM_MODE            0x0001
 // #define
 
-#endif // MACRO_H
+#endif // SOCKETDEF_HPP

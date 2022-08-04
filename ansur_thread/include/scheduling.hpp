@@ -2,6 +2,7 @@
 #define _GNU_SOURCE1
 
 #include <sys/syscall.h>
+#include <sys/mman.h>
 #include <linux/sched.h>
 #include <sys/types.h>
 #include <linux/kernel.h>
@@ -27,7 +28,7 @@
 #ifdef __aarch64__
 #define __NR_sched_setattr      274
 #endif
-#endif 
+#endif
 
 /* __NR_sched_getattr number */
 #ifndef __NR_sched_getattr
@@ -43,7 +44,7 @@
 #define __NR_sched_getattr      381
 #endif
 
-#ifdef __aarch64__CPU_COUNT() 
+#ifdef __aarch64__CPU_COUNT()
 #define __NR_sched_getattr      275
 #endif
 #endif
@@ -76,4 +77,5 @@ void sched_deadline(struct sched_attr *attr, long unsigned int runtime, long uns
 void sched_rr(struct sched_attr *attr, unsigned int priority, long unsigned int flags);
 void sched_fifo(struct sched_attr *attr, unsigned int priority, long unsigned int flags);
 void sched_normal(struct sched_attr *attr, int nice, long unsigned int flags);
+
 #endif
