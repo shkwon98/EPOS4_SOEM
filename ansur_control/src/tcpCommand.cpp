@@ -4,14 +4,14 @@ bool bRunStart = false;
 short mode;
 INPUT_LIST input;
 
-OSAL_THREAD_FUNC tcpCommand()
+void tcpCommand()
 {
     CTcpPacket* tcpPacket;
     tcpPacket = new CTcpPacket();
 
-    while (1)  // 10ms non-rt loop
+    while (tcpPacket->isRemoteON == true)  // 10ms non-rt loop
     {
-        if (SOEM::inOP && tcpPacket->readPacket() > 0)
+        if (tcpPacket->readPacket() > 0)
         {
             mode = tcpPacket->getHeader();
             switch (mode)

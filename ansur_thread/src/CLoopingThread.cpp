@@ -1,9 +1,6 @@
 #include "CLoopingThread.hpp"
 
-CLoopingThread::CLoopingThread()
-{
-    m_isActive = false;
-}
+CLoopingThread::CLoopingThread() {}
 CLoopingThread::~CLoopingThread()
 {
     if (m_thread.joinable())
@@ -58,8 +55,8 @@ bool CLoopingThread::rtLoopStart(int64_t period)
             task_time = (real_time.tv_sec - last_time.tv_sec) * 1e03 + (real_time.tv_nsec - last_time.tv_nsec) * 1e-6;
 
             // UNCOMMENT TO PRINT THE TIME MEASUREMENTS //
-            printf("[Control Thread] loop_time: %1.2f ms, task_time: %1.2f ms   \r", loop_time, task_time);
-            fflush(stdout);
+            // printf("[Control Thread] loop_time: %1.2f ms, task_time: %1.2f ms   \r", loop_time, task_time);
+            // fflush(stdout);
         }
     });
 

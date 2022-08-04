@@ -14,15 +14,15 @@ find_package(soem REQUIRED)
 
 # reference directories
 add_subdirectory(ansur_control)
-add_subdirectory(ansur_ethercat_config)
-add_subdirectory(ansur_socket_config)
-add_subdirectory(ansur_thread_config)
+add_subdirectory(ansur_ethercat)
+add_subdirectory(ansur_socket)
+add_subdirectory(ansur_thread)
 # add_subdirectory(RobotCamera)
 
 # adding the executable files & linking libraries
 add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME}
-        ethercat_config
-        control
+        ansur_ethercat
+        ansur_control
         # RobotCamera
     )

@@ -1,8 +1,5 @@
 #include "CUdpPacket.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 CUdpPacket::CUdpPacket()
 {
     memset(&server_addr, 0, sizeof(server_addr));

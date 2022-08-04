@@ -1,8 +1,5 @@
 #include "CTcpPacket.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 CTcpPacket::CTcpPacket()
 {
     memset(&server_addr, 0, sizeof(server_addr));
@@ -63,7 +60,7 @@ int CTcpPacket::readPacket()
     else if (retval == 0)
     {
         perror("\n----- Socket close -----");
-        exit(1);
+        isRemoteON = false;
     }
     else    // Packet Process
     {

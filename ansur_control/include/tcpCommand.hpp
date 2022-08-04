@@ -3,8 +3,7 @@
 
 #include "CTcpPacket.hpp"
 #include "ethercat.h"
-#include "SOEM.hpp"
 
-OSAL_THREAD_FUNC tcpCommand(void);
+void tcpCommand();
 
 #endif // TCPCOMMAND_HPP

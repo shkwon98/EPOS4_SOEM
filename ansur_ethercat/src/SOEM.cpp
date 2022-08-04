@@ -1,5 +1,7 @@
 #include "SOEM.hpp"
 
+using namespace std;
+
 char SOEM::IOmap[4096];
 int SOEM::chk = 0;
 int SOEM::expectedWKC = 0;
@@ -9,7 +11,7 @@ uint8 SOEM::currentgroup = 0;
 // Flag //
 bool SOEM::inOP = false;
 
-extern pthread_mutex_t mutex;
+extern mutex mtx;
 
 
 // Functions //
@@ -23,38 +25,38 @@ void SOEM::initializeEtherCAT(const char* ifname)
     // initialise SOEM, bind socket to ifname
     if (ec_init(ifname))
     {
-        printf("ec_init on %s succeeded.\n", ifname);
+        cout << "ec_init on " << ifname << " succeeded.\n";
 
         // find and auto-config slaves
         if (ec_config_init(FALSE) > 0)
         {
-            printf("%d slaves found and configured.\n", ec_slavecount); // ec_slavecount -> slave num
-            if (ec_slavecount != EPOS4_NUM)
+            cout << ec_slavecount << " slaves found and configured.\n";  // ec_slavecount -> slave num
+            if (ec_slavecount != TOTAL_MOTOR_NUM)
             {
-                std::cout << "WARNING : SLAVE NUMBER INSUFFICIENT\n";
-                std::cout << "End program\n";
+                cout << "WARNING : SLAVE NUMBER INSUFFICIENT\n\n";
+                cout << "End program\n";
                 ec_close();
                 exit(0);
             }
         }
         else
         {
-            std::cout << "No slaves found!\n";
-            std::cout << "End program\n";
+            cout << "No slaves found!\n\n";
+            cout << "End program\n";
             ec_close();
             exit(0);
         }
     }
     else
     {
-        std::cout << "No socket connection on " << ifname << "\nExecute as root\n";
-        std::cout << "End program\n";
+        cout << "No socket connection on " << ifname << "\nExecute as root\n\n";
+        cout << "End program\n";
         exit(0);
     }
 
     // for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
     // {
-    //     std::cout << "\nName: " << ec_slave[cnt].name << ", EEpMan: " << ec_slave[cnt].eep_man << ", eep_id: " << ec_slave[cnt].eep_id << std::endl;
+    //     cout << "\nName: " << ec_slave[cnt].name << ", EEpMan: " << ec_slave[cnt].eep_man << ", eep_id: " << ec_slave[cnt].eep_id << endl;
     // }
 }
 
@@ -66,11 +68,11 @@ void SOEM::goingSafeOP(int (*setup)(uint16 slaveIdx))
     }
 
     ec_config_map(&SOEM::IOmap);
-    std::cout << "\nSlaves mapped!\n";
+    cout << "\nSlaves mapped!\n";
     ec_configdc();
 
     // wait for all slaves to reach SAFE_OP state
-    std::cout << "State to Safe-op...\n";;
+    cout << "State to Safe-op...\n";
     ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4);
 }
 
@@ -81,7 +83,7 @@ void SOEM::goingSafeOP(int (*setup)(uint16 slaveIdx))
 void SOEM::goingOperational()
 {
     expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
-    std::cout << "Calculated workcounter " << expectedWKC << std::endl;
+    cout << "Calculated workcounter " << expectedWKC << endl;
 
     ec_dcsync0(1, TRUE, CONTROL_PERIOD_IN_ns, 0);  // SYNC0 on slave 1
 
@@ -102,21 +104,21 @@ void SOEM::goingOperational()
 
     if (ec_slave[0].state == EC_STATE_OPERATIONAL)
     {
-        std::cout << "Operational state reached for all slaves!\n\n";
+        cout << "Operational state reached for all slaves!\n\n";
         inOP = true;
     }
-    else { std::cout << "Not all slaves reached operational state.\n"; }
+    else { cout << "Not all slaves reached operational state.\n"; }
 }
 
 
 /** Map input output buffer Structs
 */
-void SOEM::mapIOStructs(SERVO_IO::SERVO_WRITE *rxPDO[], SERVO_IO::SERVO_READ *txPDO[], int num_of_servos)
+void SOEM::mapIOStructs(PDO_STRUCT servo[], int num_of_servos)
 {
-    for (int i = 1; i <= num_of_servos; ++i)
+    for (int i = 0; i < num_of_servos; ++i)
     {
-        rxPDO[i - 1] = (SERVO_IO::SERVO_WRITE *)(ec_slave[i].outputs);
-        txPDO[i - 1] = (SERVO_IO::SERVO_READ *)(ec_slave[i].inputs);
+        servo[i].write = (PDO_WRITE*)(ec_slave[i + 1].outputs);
+        servo[i].read = (PDO_READ*)(ec_slave[i + 1].inputs);
     }
 }
 
@@ -132,16 +134,28 @@ void SOEM::terminateEtherCAT()
 }
 
 
+void SOEM::ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
+{
+    static int64 integral = 0;
+    int64 delta;
+
+    delta = (refTime) % cycleTime;
+    if (delta > (cycleTime / 2)) { delta = delta - cycleTime; }
+    if (delta > 0) { integral++; }
+    if (delta < 0) { integral--; }
+    *offsetTime = -(delta / 100) - (integral / 20);
+}
+
 void *SOEM::ecatSync()
 {
     struct timespec next_time;
     clock_gettime(CLOCK_MONOTONIC, &next_time);
     while (inOP)
     {
-        pthread_mutex_lock(&mutex);
+        mtx.lock();
         ec_send_processdata();
         wkc = ec_receive_processdata(EC_TIMEOUTRET);
-        pthread_mutex_unlock(&mutex);
+        mtx.unlock();
 
         next_time.tv_sec += (next_time.tv_nsec + CONTROL_PERIOD_IN_ns) / 1e9;
         next_time.tv_nsec = (int)(next_time.tv_nsec + CONTROL_PERIOD_IN_ns) % (int)1e9;

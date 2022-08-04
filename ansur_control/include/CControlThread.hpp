@@ -7,6 +7,7 @@
 #include "socketDef.hpp"
 #include "CUdpPacket.hpp"
 #include "CLoopingThread.hpp"
+#include "SOEM.hpp"
 
 
 class CControlThread: public CLoopingThread
@@ -16,7 +17,7 @@ public:
     ~CControlThread();
 
 protected:
-    virtual bool task() override;
+    void task() final;
 
 private:
     int64_t toff = 0;
@@ -31,19 +32,13 @@ private:
 
     int started[EPOS4_NUM] = { 0 };
 
-    void ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
-    {
-        static int64 integral = 0;
-        int64 delta;
-
-        delta = (refTime) % cycleTime;
-        if (delta > (cycleTime / 2)) { delta = delta - cycleTime; }
-        if (delta > 0) { integral++; }
-        if (delta < 0) { integral--; }
-        *offsetTime = -(delta / 100) - (integral / 20);
-    }
+    bool isMotorTorqueOn = false;
+    void motorTorqueOn();
+    void motorTorqueOff();
 
     double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
+
+    void sendMotorData();
 };
 
 #endif // CCONTROLTHREAD_HPP

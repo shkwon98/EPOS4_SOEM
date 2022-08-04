@@ -52,12 +52,11 @@
 
 #define SERVO_TIMEOUT                       50000
 
-#ifndef PI
-#define PI      3.14159265359
-#define RAD2DEG     57.2957795131
-#define DEG2RAD     0.01745329252
-#endif
-
+// #ifndef PI
+// #define PI      3.14159265359
+// #define RAD2DEG     57.2957795131
+// #define DEG2RAD     0.01745329252
+// #endif
 
 int servo_enable(uint16 StatusWord, uint16 * ControlWord);
 
@@ -71,39 +70,42 @@ typedef struct _mapping_obj
     int32 Value;
 }mapping_obj;
 
-///////////////// PDO Setting /////////////////
-#pragma pack(push,1)
-struct SERVO_IO
-{
-    struct SERVO_WRITE  // 0x1600 RxPDO
-    {
-        uint16  ControlWord;        // 0x6040
-        int8    ModeOfOperation;    // 0x6060
-        int16   TargetTorque;       // 0x6071
-        int32   TargetVelocity;     // 0x60FF
-        int32   TargetPosition;     // 0x607A
-        uint32  ProfileVelocity;    // 0x6081
-        // int32  PositionOffset;     // 0x60B0
-        // int32  VelocityOffset;     // 0x60B1
-        // int16  TorqueOffset;       // 0x60B2
-    };
 
-    struct SERVO_READ  // 0x1A00 TxPDO
-    {
-        uint16  StatusWord;                 // 0x6041
-        int8    ModeOfOperationDisplay;     // 0x6061
-        int32   PositionActualValue;        // 0x6064
-        int32   VelocityActualValue;        // 0x606C
-        int16   TorqueActualValue;          // 0x6077
-        int32   current_actual_value;       // 0x30D1
-        // uint32   DigitalInput;               // 0x60FD
-        // uint16   ErrorCode;                  // 0x603F
-    };
-};
-#pragma pack(pop)
-///////////////////////////////////////////////
+//////////////////// PDO Setting ////////////////////
+typedef struct PACKED  // 0x1600 RxPDO
+{
+    uint16  ControlWord;        // 0x6040
+    int8    ModeOfOperation;    // 0x6060
+    int16   TargetTorque;       // 0x6071
+    int32   TargetVelocity;     // 0x60FF
+    int32   TargetPosition;     // 0x607A
+    uint32  ProfileVelocity;    // 0x6081
+    // int32  PositionOffset;     // 0x60B0
+    // int32  VelocityOffset;     // 0x60B1
+    // int16  TorqueOffset;       // 0x60B2
+}PDO_WRITE;
+
+typedef struct PACKED  // 0x1A00 TxPDO
+{
+    uint16  StatusWord;                 // 0x6041
+    int8    ModeOfOperationDisplay;     // 0x6061
+    int32   PositionActualValue;        // 0x6064
+    int32   VelocityActualValue;        // 0x606C
+    int16   TorqueActualValue;          // 0x6077
+    int32   current_actual_value;       // 0x30D1
+}PDO_READ;
+
+typedef struct PACKED
+{
+    PDO_WRITE  *write;
+    PDO_READ   *read;
+}PDO_STRUCT;
+/////////////////////////////////////////////////////
+
 
 #define EPOS4_NUM 1
+// #define ELMO_NUM 5
+#define TOTAL_MOTOR_NUM ( EPOS4_NUM )  // TOTAL_MOTOR_NUM ( EPOS4_NUM + ELMO_NUM )
 
 #define CONTROL_PERIOD_IN_ms  ( 1.0 )  // ms
 #define CONTROL_PERIOD_IN_s   ( 1e-03 * CONTROL_PERIOD_IN_ms )

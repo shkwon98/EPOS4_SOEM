@@ -1,7 +1,5 @@
-# /ansur_ethercat_config/CMakeLists.txt
-project(ethercat_config)
-
-set(OS_LIBS pthread m)
+# /ansur_socket/CMakeLists.txt
+project(ansur_socket)
 
 # static library
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
@@ -14,7 +12,5 @@ add_library(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 target_link_libraries(${PROJECT_NAME}
-    ${OS_LIBS}
     soem
-    socket_config
     )
