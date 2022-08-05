@@ -52,11 +52,8 @@
 
 #define SERVO_TIMEOUT                       50000
 
-// #ifndef PI
-// #define PI      3.14159265359
 // #define RAD2DEG     57.2957795131
 // #define DEG2RAD     0.01745329252
-// #endif
 
 int servo_enable(uint16 StatusWord, uint16 * ControlWord);
 

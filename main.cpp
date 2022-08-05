@@ -31,23 +31,21 @@ int main(int argc, char *argv[])
         if (SOEM::inOP == true)
         {
             thread th_ecatCheck(SOEM::ecatCheck);
-            thread th_ecatSync(SOEM::ecatSync);
 
             // Start Real-Time Control Thread
-            epos4.rtLoopStart(CONTROL_PERIOD_IN_ns);
+            // epos4.rtLoopStart(CONTROL_PERIOD_IN_ns);
+            epos4.rtLoopStart(1.3 * CONTROL_PERIOD_IN_ns);
 
-            // Start TCP Command Receiver Thread
-            thread th_tcpCommand(&tcpCommand);
-
-            // Wait for Remote Program Shutdown
-            th_tcpCommand.join();
-            cout << "Remote Program is off. Motor Power off.\n\n";
+            // Start TCP Command Receiver Thread & Wait for Remote Program Shutdown
+            // thread th_tcpCommand(&tcpCommand);
+            // th_tcpCommand.join();
+            sleep(20);
 
             // Program End Process
+            cout << "\n\nRemote Program is off. Motor Power off.\n\n";
             SOEM::inOP = false;
             sleep(1);  // Wait until motor power is off
             epos4.rtLoopStop();
-            th_ecatSync.join();
             th_ecatCheck.join();
         }
 

@@ -11,9 +11,6 @@ uint8 SOEM::currentgroup = 0;
 // Flag //
 bool SOEM::inOP = false;
 
-extern mutex mtx;
-
-
 // Functions //
 /** Initialize lib in single NIC mode and init all slaves.
  *
@@ -144,23 +141,6 @@ void SOEM::ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
     if (delta > 0) { integral++; }
     if (delta < 0) { integral--; }
     *offsetTime = -(delta / 100) - (integral / 20);
-}
-
-void *SOEM::ecatSync()
-{
-    struct timespec next_time;
-    clock_gettime(CLOCK_MONOTONIC, &next_time);
-    while (inOP)
-    {
-        mtx.lock();
-        ec_send_processdata();
-        wkc = ec_receive_processdata(EC_TIMEOUTRET);
-        mtx.unlock();
-
-        next_time.tv_sec += (next_time.tv_nsec + CONTROL_PERIOD_IN_ns) / 1e9;
-        next_time.tv_nsec = (int)(next_time.tv_nsec + CONTROL_PERIOD_IN_ns) % (int)1e9;
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_time, NULL);
-    }
 }
 
 /** SOEM providing function. Check the EtherCAT communication state, and recover when the error occured.
