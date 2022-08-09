@@ -100,7 +100,7 @@ typedef struct PACKED
 /////////////////////////////////////////////////////
 
 
-#define EPOS4_NUM 1
+#define EPOS4_NUM 2
 // #define ELMO_NUM 5
 #define TOTAL_MOTOR_NUM ( EPOS4_NUM )  // TOTAL_MOTOR_NUM ( EPOS4_NUM + ELMO_NUM )
 

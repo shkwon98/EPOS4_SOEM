@@ -1,4 +1,6 @@
 #include "CLoopingThread.hpp"
+#include "csvWrite.hpp"
+#include <vector>
 
 CLoopingThread::CLoopingThread() {}
 CLoopingThread::~CLoopingThread()
@@ -38,6 +40,11 @@ bool CLoopingThread::rtLoopStart(int64_t period)
 
     m_thread = std::thread([&]()
     {
+        std::vector<double> vec1;
+        std::vector<double> vec2;
+        std::vector<double> vec3;
+        double i = 0;
+
         while (m_isActive)
         {
             add_timespec(&ts, m_addtime);
@@ -57,7 +64,13 @@ bool CLoopingThread::rtLoopStart(int64_t period)
             // UNCOMMENT TO PRINT THE TIME MEASUREMENTS //
             // printf("[Control Thread] loop_time: %1.2f ms, task_time: %1.2f ms   \r", loop_time, task_time);
             // fflush(stdout);
+
+            vec1.push_back(i++);
+            vec2.push_back(loop_time);
+            vec3.push_back(task_time);
         }
+        std::vector<std::vector<double>> vals = { vec1, vec2, vec3 };
+        write_csv("/home/pi/workspace/1.Ansur_SOEM_Controller/log/1ms_test_priority30_1.csv", vals);
     });
 
     return m_isActive;

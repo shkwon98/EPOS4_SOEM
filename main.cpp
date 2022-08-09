@@ -9,7 +9,7 @@
 
 using namespace std;
 
-static CControlThread epos4;
+static CControlThread motorTask;
 PDO_STRUCT EPOS4[EPOS4_NUM];
 
 mutex mtx;
@@ -30,23 +30,23 @@ int main(int argc, char *argv[])
 
         if (SOEM::inOP == true)
         {
-            thread th_ecatCheck(SOEM::ecatCheck);
+            // thread th_ecatCheck(SOEM::ecatCheck);
 
             // Start Real-Time Control Thread
-            // epos4.rtLoopStart(CONTROL_PERIOD_IN_ns);
-            epos4.rtLoopStart(1.3 * CONTROL_PERIOD_IN_ns);
+            motorTask.rtLoopStart(CONTROL_PERIOD_IN_ns);
+            // motorTask.rtLoopStart(1.3 * CONTROL_PERIOD_IN_ns);
 
             // Start TCP Command Receiver Thread & Wait for Remote Program Shutdown
             // thread th_tcpCommand(&tcpCommand);
             // th_tcpCommand.join();
-            sleep(20);
+            sleep(60);
 
             // Program End Process
             cout << "\n\nRemote Program is off. Motor Power off.\n\n";
             SOEM::inOP = false;
             sleep(1);  // Wait until motor power is off
-            epos4.rtLoopStop();
-            th_ecatCheck.join();
+            motorTask.rtLoopStop();
+            // th_ecatCheck.join();
         }
 
         SOEM::terminateEtherCAT();

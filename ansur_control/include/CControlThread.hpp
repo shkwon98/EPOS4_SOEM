@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <math.h>
 #include <mutex>
 #include "ecatDef.hpp"
-#include <vector>
 #include "socketDef.hpp"
 #include "CUdpPacket.hpp"
 #include "CLoopingThread.hpp"
@@ -52,6 +52,13 @@ private:
 
     void controlWithGUI();
     void controlTest();
+
+
+    vector<int> vec1;
+    vector<int> vec2;
+    vector<int> vec3;
+    vector<int> vec4;
+    int i = 0;
 };
 
 #endif // CCONTROLTHREAD_HPP
