@@ -100,9 +100,13 @@ typedef struct PACKED
 /////////////////////////////////////////////////////
 
 
+// #define EPOS4_NUM 1
 #define EPOS4_NUM 2
+
 // #define ELMO_NUM 5
-#define TOTAL_MOTOR_NUM ( EPOS4_NUM )  // TOTAL_MOTOR_NUM ( EPOS4_NUM + ELMO_NUM )
+
+#define TOTAL_MOTOR_NUM ( EPOS4_NUM )
+// TOTAL_MOTOR_NUM ( EPOS4_NUM + ELMO_NUM )
 
 #define CONTROL_PERIOD_IN_ms  ( 1.0 )  // ms
 #define CONTROL_PERIOD_IN_s   ( 1e-03 * CONTROL_PERIOD_IN_ms )

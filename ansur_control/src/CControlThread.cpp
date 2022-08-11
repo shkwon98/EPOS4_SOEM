@@ -179,11 +179,6 @@ void CControlThread::controlWithGUI()
 }
 void CControlThread::controlTest()
 {
-    // double dTriPeriod = (2 * M_PI) / 5;
-    // tarPos = 1 * sin(dTriPeriod * CONTROL_PERIOD_IN_s * tick++);
-    // EPOS4[0].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_POSITION;
-    // EPOS4[0].write->TargetPosition = (int)CONV_MM_to_INC(tarPos);
-
     EPOS4[0].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_VELOCITY;
     EPOS4[1].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_VELOCITY;
     EPOS4[0].write->TargetVelocity = 10000;
@@ -205,6 +200,12 @@ void CControlThread::controlTest()
     // {
     //     EPOS4[1].write->TargetVelocity = 0;
     // }
+
+
+    // double dTriPeriod = (2 * M_PI) / 5;
+    // tarPos = 1 * sin(dTriPeriod * CONTROL_PERIOD_IN_s * tick++);
+    // EPOS4[0].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_POSITION;
+    // EPOS4[0].write->TargetPosition = (int)CONV_MM_to_INC(tarPos);
 }
 
 void CControlThread::task()
