@@ -34,31 +34,18 @@ private:
     bool bEndFlag = true;
     double endCnt = 0;
 
-    vector<int32_t> targetPos;
-    vector<int16_t> targetToq;
-    vector<int32_t> targetVel;
-    vector<int32_t> actualPos;
-    vector<int16_t> actualToq;
-    vector<int32_t> actualVel;
-
     bool isMotorTorqueOn = false;
     void motorTorqueOn();
     void motorTorqueOff();
 
     void sendMotorState();
-    void printMotorState();
+    void printMotorStatus();
 
     double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
 
     void controlWithGUI();
     void controlTest();
 
-
-    vector<int> vec1;
-    vector<int> vec2;
-    vector<int> vec3;
-    vector<int> vec4;
-    int i = 0;
 };
 
 #endif // CCONTROLTHREAD_HPP

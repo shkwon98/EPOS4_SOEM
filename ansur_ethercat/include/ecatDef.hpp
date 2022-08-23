@@ -100,8 +100,8 @@ typedef struct PACKED
 /////////////////////////////////////////////////////
 
 
-// #define EPOS4_NUM 1
-#define EPOS4_NUM 2
+#define EPOS4_NUM 1
+// #define EPOS4_NUM 2
 
 // #define ELMO_NUM 5
 

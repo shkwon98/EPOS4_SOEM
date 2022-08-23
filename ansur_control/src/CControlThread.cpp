@@ -11,12 +11,12 @@ CControlThread::CControlThread() : CLoopingThread()
 {
     udpPacket = new CUdpPacket;
 
-    targetPos.resize(EPOS4_NUM);
-    targetToq.resize(EPOS4_NUM);
-    targetVel.resize(EPOS4_NUM);
-    actualPos.resize(EPOS4_NUM);
-    actualToq.resize(EPOS4_NUM);
-    actualVel.resize(EPOS4_NUM);
+    // vector<int> vec1;
+    // vector<int> vec2;
+    // vector<int> vec3;
+    // vec1.reserve(70000);
+    // vec2.reserve(70000);
+    // vec3.reserve(70000);
 }
 CControlThread::~CControlThread() { delete udpPacket; }
 
@@ -64,39 +64,27 @@ void CControlThread::sendMotorState()
     udpPacket->encode(logData);
     udpPacket->sendPacket();
 }
-void CControlThread::printMotorState()
+void CControlThread::printMotorStatus()
 {
     // MOTOR 1
-    targetPos[0] = EPOS4[0].write->TargetPosition;
-    targetToq[0] = EPOS4[0].write->TargetTorque;
-    targetVel[0] = EPOS4[0].write->TargetVelocity;
-    actualPos[0] = EPOS4[0].read->PositionActualValue;
-    actualToq[0] = EPOS4[0].read->TorqueActualValue;
-    actualVel[0] = EPOS4[0].read->VelocityActualValue;
     std::cout << "[MOTOR1] "
-        << "Target Pos: " << std::setw(4) << targetPos[0] << ", "
-        << "Target Toq: " << std::setw(4) << targetToq[0] << ", "
-        << "Target Vel: " << std::setw(4) << targetVel[0] << " | "
-        << "Actual Pos: " << std::setw(4) << actualPos[0] << ", "
-        << "Actual Toq: " << std::setw(4) << actualToq[0] << ", "
-        << "Actual Vel: " << std::setw(4) << actualVel[0]
-        << "  ||  ";
+        << "Target Pos: " << std::setw(4) << EPOS4[0].write->TargetPosition << ", "
+        << "Target Toq: " << std::setw(4) << EPOS4[0].write->TargetTorque << ", "
+        << "Target Vel: " << std::setw(4) << EPOS4[0].write->TargetVelocity << " | "
+        << "Actual Pos: " << std::setw(4) << EPOS4[0].read->PositionActualValue << ", "
+        << "Actual Toq: " << std::setw(4) << EPOS4[0].read->TorqueActualValue << ", "
+        << "Actual Vel: " << std::setw(4) << EPOS4[0].read->VelocityActualValue
+        << "  ||  \r";
 
     // MOTOR 2
-    targetPos[1] = EPOS4[1].write->TargetPosition;
-    targetToq[1] = EPOS4[1].write->TargetTorque;
-    targetVel[1] = EPOS4[1].write->TargetVelocity;
-    actualPos[1] = EPOS4[1].read->PositionActualValue;
-    actualToq[1] = EPOS4[1].read->TorqueActualValue;
-    actualVel[1] = EPOS4[1].read->VelocityActualValue;
-    std::cout << "[MOTOR2] "
-        << "Target Pos: " << std::setw(4) << targetPos[1] << ", "
-        << "Target Toq: " << std::setw(4) << targetToq[1] << ", "
-        << "Target Vel: " << std::setw(4) << targetVel[1] << " | "
-        << "Actual Pos: " << std::setw(4) << actualPos[1] << ", "
-        << "Actual Toq: " << std::setw(4) << actualToq[1] << ", "
-        << "Actual Vel: " << std::setw(4) << actualVel[1]
-        << " \r";
+    // std::cout << "[MOTOR2] "
+    //     << "Target Pos: " << std::setw(4) << EPOS4[1].write->TargetPosition << ", "
+    //     << "Target Toq: " << std::setw(4) << EPOS4[1].write->TargetTorque << ", "
+    //     << "Target Vel: " << std::setw(4) << EPOS4[1].write->TargetVelocity << " | "
+    //     << "Actual Pos: " << std::setw(4) << EPOS4[1].read->PositionActualValue << ", "
+    //     << "Actual Toq: " << std::setw(4) << EPOS4[1].read->TorqueActualValue << ", "
+    //     << "Actual Vel: " << std::setw(4) << EPOS4[1].read->VelocityActualValue
+    //     << " \r";
 
     fflush(stdout);
 }
@@ -180,26 +168,9 @@ void CControlThread::controlWithGUI()
 void CControlThread::controlTest()
 {
     EPOS4[0].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_VELOCITY;
-    EPOS4[1].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_VELOCITY;
+    // EPOS4[1].write->ModeOfOperation = OP_MODE_CYCLIC_SYNC_VELOCITY;
     EPOS4[0].write->TargetVelocity = 10000;
-    EPOS4[1].write->TargetVelocity = 10000;
-
-    // if (EPOS4[0].read->PositionActualValue > 0)
-    // {
-    //     EPOS4[0].write->TargetVelocity = -7000;
-    // }
-    // else
-    // {
-    //     EPOS4[0].write->TargetVelocity = 0;
-    // }
-    // if (EPOS4[1].read->PositionActualValue > 0)
-    // {
-    //     EPOS4[1].write->TargetVelocity = -7000;
-    // }
-    // else
-    // {
-    //     EPOS4[1].write->TargetVelocity = 0;
-    // }
+    // EPOS4[1].write->TargetVelocity = 10000;
 
 
     // double dTriPeriod = (2 * M_PI) / 5;
@@ -216,24 +187,17 @@ void CControlThread::task()
 
         if (isMotorTorqueOn == true)
         {
-            // Motor Control Command
-            // controlWithGUI();
+            /******  MOTOR CONTROL COMMAND  ******/
+            controlWithGUI();
             // controlTest();
 
-            // Dummy Task for Performance Evaluation
-            // int k = 0;
-            // for (int i = 0; i < 130000; i++)
-            // {
-            //     k++;
-            // }
+            /*******  PRINT MOTOR STATUS  *******/
+            printMotorStatus();
 
-            // Print Out Motor State
-            // printMotorState();
 
-            // vec1.push_back(i++);
-            // vec2.push_back(EPOS4[0].write->TargetVelocity);
-            // vec3.push_back(EPOS4[0].read->VelocityActualValue);
-            // vec4.push_back(EPOS4[1].read->VelocityActualValue);
+            // vec1.push_back(EPOS4[0].write->TargetVelocity);
+            // vec2.push_back(EPOS4[0].read->VelocityActualValue);
+            // vec3.push_back(EPOS4[1].read->VelocityActualValue);
         }
 
         // mtx.lock();
@@ -245,11 +209,11 @@ void CControlThread::task()
     {
         motorTorqueOff();
 
-        // std::vector<std::vector<int>> vals = { vec1, vec2, vec3, vec4 };
-        // write_csv("/home/pi/workspace/1.Ansur_SOEM_Controller/log/tarVel_1.3ms_with_dummy_3.csv", vals);
+        // std::vector<std::vector<int>> vals = { vec1, vec2 };
+        // write_csv("/home/pi/workspace/1.Ansur_SOEM/log/1ms_velocity_3.csv", vals);
     }
 
-    if (ec_slave[0].hasdc)  /* calculate toff to get linux time and DC synced */
+    if (ec_slave[0].hasdc)  // calculate toff to get linux time and DC synced
     {
         SOEM::ec_sync(ec_DCtime, m_period, &toff);
         m_addtime = m_period + toff;

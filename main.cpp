@@ -30,28 +30,27 @@ int main(int argc, char *argv[])
 
         if (SOEM::inOP == true)
         {
-            // thread th_ecatCheck(SOEM::ecatCheck);
+            thread th_ecatCheck(SOEM::ecatCheck);         // Start SOEM ecatCheck Thread
 
-            // Start Real-Time Control Thread
-            motorTask.rtLoopStart(CONTROL_PERIOD_IN_ns);
-            // motorTask.rtLoopStart(1.3 * CONTROL_PERIOD_IN_ns);
+            motorTask.rtLoopStart(CONTROL_PERIOD_IN_ns);  // Start Real-Time Control Thread
 
-            // Start TCP Command Receiver Thread & Wait for Remote Program Shutdown
-            // thread th_tcpCommand(&tcpCommand);
-            // th_tcpCommand.join();
-            sleep(60);
+            thread th_tcpCommand(&tcpCommand);            // Start TCP Command Receiver Thread
+            th_tcpCommand.join();                         // Block until Remote Program Shutdown
+            // sleep(60);
 
-            // Program End Process
             cout << "\n\nRemote Program is off. Motor Power off.\n\n";
-            SOEM::inOP = false;
-            sleep(1);  // Wait until motor power is off
-            motorTask.rtLoopStop();
-            // th_ecatCheck.join();
+            SOEM::inOP = false;      // Start Program End Process
+            sleep(1);                // Wait for the motor power to turn off
+            motorTask.rtLoopStop();  // Stop and Join Real-Time Control Thread
+            th_ecatCheck.join();     // Join SOEM ecatCheck Thread 
         }
 
         SOEM::terminateEtherCAT();
     }
-    else { cout << "Usage: main [ifname]\n[ifname] = eth0 for example\n\n"; }
+    else
+    {
+        cout << "Usage: main [ifname]\n[ifname] = eth0 for example\n\n";
+    }
 
     cout << "End program\n";
     return 0;
