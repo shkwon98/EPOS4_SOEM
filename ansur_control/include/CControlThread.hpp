@@ -2,13 +2,17 @@
 #define CCONTROLTHREAD_HPP
 
 #include <iostream>
+#include <iomanip>
+#include <vector>
 #include <math.h>
+#include <mutex>
 #include "ecatDef.hpp"
 #include "socketDef.hpp"
 #include "CUdpPacket.hpp"
 #include "CLoopingThread.hpp"
 #include "SOEM.hpp"
 
+using namespace std;
 
 class CControlThread: public CLoopingThread
 {
@@ -20,9 +24,9 @@ protected:
     void task() final;
 
 private:
-    int64_t toff = 0;
-
     CUdpPacket* udpPacket;
+
+    int64_t toff = 0;
 
     unsigned int tick = 0;
     double curPos = 0.0;
@@ -30,15 +34,18 @@ private:
     bool bEndFlag = true;
     double endCnt = 0;
 
-    int started[EPOS4_NUM] = { 0 };
-
     bool isMotorTorqueOn = false;
     void motorTorqueOn();
     void motorTorqueOff();
 
+    void sendMotorState();
+    void printMotorStatus();
+
     double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
 
-    void sendMotorData();
+    void controlWithGUI();
+    void controlTest();
+
 };
 
 #endif // CCONTROLTHREAD_HPP

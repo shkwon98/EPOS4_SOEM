@@ -11,9 +11,6 @@ uint8 SOEM::currentgroup = 0;
 // Flag //
 bool SOEM::inOP = false;
 
-extern mutex mtx;
-
-
 // Functions //
 /** Initialize lib in single NIC mode and init all slaves.
  *
@@ -30,7 +27,7 @@ void SOEM::initializeEtherCAT(const char* ifname)
         // find and auto-config slaves
         if (ec_config_init(FALSE) > 0)
         {
-            cout << ec_slavecount << " slaves found and configured.\n";  // ec_slavecount -> slave num
+            cout << ec_slavecount << " slaves found and configured.\n\n";  // ec_slavecount -> slave num
             if (ec_slavecount != TOTAL_MOTOR_NUM)
             {
                 cout << "WARNING : SLAVE NUMBER INSUFFICIENT\n\n";
@@ -54,10 +51,10 @@ void SOEM::initializeEtherCAT(const char* ifname)
         exit(0);
     }
 
-    // for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
-    // {
-    //     cout << "\nName: " << ec_slave[cnt].name << ", EEpMan: " << ec_slave[cnt].eep_man << ", eep_id: " << ec_slave[cnt].eep_id << endl;
-    // }
+    for (int cnt = 1; cnt <= ec_slavecount; ++cnt)
+    {
+        cout << "Name: " << ec_slave[cnt].name << ", EEpMan: " << ec_slave[cnt].eep_man << ", eep_id: " << ec_slave[cnt].eep_id << "\n";
+    }
 }
 
 void SOEM::goingSafeOP(int (*setup)(uint16 slaveIdx))
@@ -66,7 +63,6 @@ void SOEM::goingSafeOP(int (*setup)(uint16 slaveIdx))
     {
         ec_slave[i].PO2SOconfig = setup;
     }
-
     ec_config_map(&SOEM::IOmap);
     cout << "\nSlaves mapped!\n";
     ec_configdc();
@@ -85,7 +81,10 @@ void SOEM::goingOperational()
     expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
     cout << "Calculated workcounter " << expectedWKC << endl;
 
+    // ec_configdc();
     ec_dcsync0(1, TRUE, CONTROL_PERIOD_IN_ns, 0);  // SYNC0 on slave 1
+
+    // sleep(2);
 
     ec_slave[0].state = EC_STATE_OPERATIONAL;
     // send one valid process data to make outputs in slaves happy
@@ -144,23 +143,6 @@ void SOEM::ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
     if (delta > 0) { integral++; }
     if (delta < 0) { integral--; }
     *offsetTime = -(delta / 100) - (integral / 20);
-}
-
-void *SOEM::ecatSync()
-{
-    struct timespec next_time;
-    clock_gettime(CLOCK_MONOTONIC, &next_time);
-    while (inOP)
-    {
-        mtx.lock();
-        ec_send_processdata();
-        wkc = ec_receive_processdata(EC_TIMEOUTRET);
-        mtx.unlock();
-
-        next_time.tv_sec += (next_time.tv_nsec + CONTROL_PERIOD_IN_ns) / 1e9;
-        next_time.tv_nsec = (int)(next_time.tv_nsec + CONTROL_PERIOD_IN_ns) % (int)1e9;
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_time, NULL);
-    }
 }
 
 /** SOEM providing function. Check the EtherCAT communication state, and recover when the error occured.

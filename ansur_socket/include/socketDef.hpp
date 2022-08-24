@@ -3,8 +3,8 @@
 
 #define TCP_PORT 2000
 #define UDP_PORT 3000
-#define GUI_PC_IP "192.168.0.9"
-#define RASPBERRY_PI_IP "192.168.0.10"
+#define GUI_PC_IP "192.168.0.55"
+#define RASPBERRY_PI_IP "192.168.0.50"
 
 #define RX_BUFFER_SIZE 1024
 #define TX_BUFFER_SIZE 1024
@@ -56,7 +56,7 @@ typedef struct
 #define LEAD_PITCH 0.25  // 0.25 mm/rev
 #define GEAR_RATIO 17.0  // 17:1
 
-#define SENSOR_INTER_FACTOR 4.0*256.0
+#define SENSOR_INTER_FACTOR (4.0 * 256.0)
 
 #define INC_PER_REV GEAR_RATIO*SENSOR_INTER_FACTOR
 #define MM_PER_INC LEAD_PITCH/((float)(GEAR_RATIO*SENSOR_INTER_FACTOR))  // currently 2.45 um/inc
@@ -90,5 +90,6 @@ typedef struct
 
 #define STREAM_MODE            0x0001
 // #define
+
 
 #endif // SOCKETDEF_HPP
