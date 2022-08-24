@@ -16,7 +16,7 @@ public:
     static int wkc;
 
     static void initializeEtherCAT(const char* ifname);
-    static void goingSafeOP(int (*setup)(uint16 slaveIdx));
+    static void pdoMapping(int (*setup)(uint16 slaveIdx));
     static void goingOperational();
     static void mapIOStructs(PDO_STRUCT servo[], int num_of_servos);
     static void terminateEtherCAT();

@@ -10,7 +10,7 @@
 using namespace std;
 
 static CControlThread motorTask;
-PDO_STRUCT EPOS4[EPOS4_NUM];
+PDO_STRUCT KISTAR[KISTAR_NUM];
 
 mutex mtx;
 
@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
         const char* ifname = argv[1];
 
         SOEM::initializeEtherCAT(ifname);
-        SOEM::goingSafeOP(CPdoMapping::mapMotorPDOs);
+        // SOEM::pdoMapping(CPdoMapping::mapMotorPDOs);
         SOEM::goingOperational();
-        SOEM::mapIOStructs(EPOS4, EPOS4_NUM);
+        SOEM::mapIOStructs(KISTAR, KISTAR_NUM);
 
         if (SOEM::inOP == true)
         {

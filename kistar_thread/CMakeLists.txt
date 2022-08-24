@@ -1,5 +1,5 @@
-# /ansur_thread/CMakeLists.txt
-project(ansur_thread)
+# /kistar_thread/CMakeLists.txt
+project(kistar_thread)
 
 # static library
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS

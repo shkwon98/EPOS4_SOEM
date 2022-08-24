@@ -28,7 +28,7 @@ void SOEM::initializeEtherCAT(const char* ifname)
         if (ec_config_init(FALSE) > 0)
         {
             cout << ec_slavecount << " slaves found and configured.\n\n";  // ec_slavecount -> slave num
-            if (ec_slavecount != TOTAL_MOTOR_NUM)
+            if (ec_slavecount != TOTAL_SLAVE_NUM)
             {
                 cout << "WARNING : SLAVE NUMBER INSUFFICIENT\n\n";
                 cout << "End program\n";
@@ -57,19 +57,13 @@ void SOEM::initializeEtherCAT(const char* ifname)
     }
 }
 
-void SOEM::goingSafeOP(int (*setup)(uint16 slaveIdx))
+void SOEM::pdoMapping(int (*setup)(uint16 slaveIdx))
 {
     for (int i = 1; i <= ec_slavecount; ++i)
     {
         ec_slave[i].PO2SOconfig = setup;
     }
-    ec_config_map(&SOEM::IOmap);
     cout << "\nSlaves mapped!\n";
-    ec_configdc();
-
-    // wait for all slaves to reach SAFE_OP state
-    cout << "State to Safe-op...\n";
-    ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4);
 }
 
 
@@ -78,10 +72,16 @@ void SOEM::goingSafeOP(int (*setup)(uint16 slaveIdx))
 */
 void SOEM::goingOperational()
 {
+    ec_config_map(&SOEM::IOmap);
+    ec_configdc();
+
+    // wait for all slaves to reach SAFE_OP state
+    cout << "State to Safe-op...\n";
+    ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4);
+
     expectedWKC = (ec_group[0].outputsWKC * 2) + ec_group[0].inputsWKC;
     cout << "Calculated workcounter " << expectedWKC << endl;
 
-    // ec_configdc();
     ec_dcsync0(1, TRUE, CONTROL_PERIOD_IN_ns, 0);  // SYNC0 on slave 1
 
     // sleep(2);

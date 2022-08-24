@@ -1,6 +1,5 @@
 #include "tcpCommand.hpp"
 
-bool bRunStart = false;
 short mode;
 INPUT_LIST input;
 
@@ -16,22 +15,18 @@ void tcpCommand()
             mode = tcpPacket->getHeader();
             switch (mode)
             {
-                case COMMAND_SET_TASK_PARAM:
-                    tcpPacket->decode(input.taskParam);
+                case MODE_OFF:
                     break;
 
-                case COMMAND_RUN_CSP:
-                    tcpPacket->decode(bRunStart);
+                case MODE_JOINT_POSITION:
+                    tcpPacket->decode(input);
                     break;
 
-                case COMMAND_RUN_CSV:
-                    tcpPacket->decode(bRunStart);
-                    tcpPacket->decode(input.velocity);
+                case MODE_MOTION:
+                    // tcpPacket->decode(input);
                     break;
 
-                case COMMAND_RUN_CST:
-                    tcpPacket->decode(bRunStart);
-                    tcpPacket->decode(input.torque);
+                default:
                     break;
             }
         }

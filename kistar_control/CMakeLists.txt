@@ -1,5 +1,5 @@
-# /ansur_socket/CMakeLists.txt
-project(ansur_socket)
+# /kistar_control/CMakeLists.txt
+project(kistar_control)
 
 # static library
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
@@ -12,5 +12,7 @@ add_library(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 target_link_libraries(${PROJECT_NAME}
-    soem
+    kistar_ethercat    
+    kistar_thread
+    kistar_socket
     )

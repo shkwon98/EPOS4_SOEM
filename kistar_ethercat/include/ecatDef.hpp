@@ -71,25 +71,84 @@ typedef struct _mapping_obj
 //////////////////// PDO Setting ////////////////////
 typedef struct PACKED  // 0x1600 RxPDO
 {
-    uint16  ControlWord;        // 0x6040
-    int8    ModeOfOperation;    // 0x6060
-    int16   TargetTorque;       // 0x6071
-    int32   TargetVelocity;     // 0x60FF
-    int32   TargetPosition;     // 0x607A
-    uint32  ProfileVelocity;    // 0x6081
-    // int32  PositionOffset;     // 0x60B0
-    // int32  VelocityOffset;     // 0x60B1
-    // int16  TorqueOffset;       // 0x60B2
+    int16   J1_TARGET1;         // 0x00060001
+    int16   J1_TARGET2;         // 0x00060002
+    int16   J1_TARGET3;         // 0x00060003
+    int16   J1_TARGET4;         // 0x00060004
+
+    int16   J2_TARGET1;         // 0x00060005
+    int16   J2_TARGET2;         // 0x00060006
+    int16   J2_TARGET3;         // 0x00060007
+    int16   J2_TARGET4;         // 0x00060008
+
+    int16   J3_TARGET1;         // 0x00060009
+    int16   J3_TARGET2;         // 0x0006000A
+    int16   J3_TARGET3;         // 0x0006000B
+    int16   J3_TARGET4;         // 0x0006000C
+
+    int16   J4_TARGET1;         // 0x0006000D
+    int16   J4_TARGET2;         // 0x0006000E
+    int16   J4_TARGET3;         // 0x0006000F
+    int16   J4_TARGET4;         // 0x00060010
+
+    int16   HAND_STATUS_OUT1;   // 0x00060011
+    int16   HAND_STATUS_OUT2;   // 0x00060012
+    int16   HAND_STATUS_OUT3;   // 0x00060013
+    int16   HAND_STATUS_OUT4;   // 0x00060014
+
+    int16   ADD_INFO_1;         // 0x00060015
+    int16   ADD_INFO_2;         // 0x00060016
+    int16   ADD_INFO_3;         // 0x00060017
+    int16   ADD_INFO_4;         // 0x00060018
+    int16   ADD_INFO_5;         // 0x00060019
+    int16   ADD_INFO_6;         // 0x0006001A
+    int16   ADD_INFO_7;         // 0x0006001B
+    int16   ADD_INFO_8;         // 0x0006001C
+    int16   ADD_INFO_9;         // 0x0006001D
+    int16   ADD_INFO_10;        // 0x0006001E
+    int16   ADD_INFO_11;        // 0x0006001F
+    int16   ADD_INFO_12;        // 0x00060020
 }PDO_WRITE;
 
 typedef struct PACKED  // 0x1A00 TxPDO
 {
-    uint16  StatusWord;                 // 0x6041
-    int8    ModeOfOperationDisplay;     // 0x6061
-    int32   PositionActualValue;        // 0x6064
-    int32   VelocityActualValue;        // 0x606C
-    int16   TorqueActualValue;          // 0x6077
-    int32   current_actual_value;       // 0x30D1
+    int16   J1_DATA1;          // 0x00060001
+    int16   J1_DATA2;          // 0x00060002
+    int16   J1_DATA3;          // 0x00060003
+    int16   J1_DATA4;          // 0x00060004
+
+    int16   J2_DATA1;          // 0x00060005
+    int16   J2_DATA2;          // 0x00060006
+    int16   J2_DATA3;          // 0x00060007
+    int16   J2_DATA4;          // 0x00060008
+
+    int16   J3_DATA1;          // 0x00060009
+    int16   J3_DATA2;          // 0x0006000A
+    int16   J3_DATA3;          // 0x0006000B
+    int16   J3_DATA4;          // 0x0006000C
+
+    int16   J4_DATA1;          // 0x0006000D
+    int16   J4_DATA2;          // 0x0006000E
+    int16   J4_DATA3;          // 0x0006000F
+    int16   J4_DATA4;          // 0x00060010
+
+    int16   HAND_STATUS_IN1;   // 0x00060011
+    int16   HAND_STATUS_IN2;   // 0x00060012
+    int16   HAND_STATUS_IN3;   // 0x00060013
+    int16   HAND_STATUS_IN4;   // 0x00060014
+
+    int16   ADD_INFO_1;         // 0x00060015
+    int16   ADD_INFO_2;         // 0x00060016
+    int16   ADD_INFO_3;         // 0x00060017
+    int16   ADD_INFO_4;         // 0x00060018
+    int16   ADD_INFO_5;         // 0x00060019
+    int16   ADD_INFO_6;         // 0x0006001A
+    int16   ADD_INFO_7;         // 0x0006001B
+    int16   ADD_INFO_8;         // 0x0006001C
+    int16   ADD_INFO_9;         // 0x0006001D
+    int16   ADD_INFO_10;        // 0x0006001E
+    int16   ADD_INFO_11;        // 0x0006001F
+    int16   ADD_INFO_12;        // 0x00060020
 }PDO_READ;
 
 typedef struct PACKED
@@ -100,13 +159,12 @@ typedef struct PACKED
 /////////////////////////////////////////////////////
 
 
-#define EPOS4_NUM 1
-// #define EPOS4_NUM 2
-
+#define KISTAR_NUM 1
+// #define EPOS4_NUM 1
 // #define ELMO_NUM 5
 
-#define TOTAL_MOTOR_NUM ( EPOS4_NUM )
-// TOTAL_MOTOR_NUM ( EPOS4_NUM + ELMO_NUM )
+#define TOTAL_SLAVE_NUM ( KISTAR_NUM )
+// TOTAL_SLAVE_NUM ( EPOS4_NUM + ELMO_NUM )
 
 #define CONTROL_PERIOD_IN_ms  ( 1.0 )  // ms
 #define CONTROL_PERIOD_IN_s   ( 1e-03 * CONTROL_PERIOD_IN_ms )
