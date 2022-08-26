@@ -3,7 +3,8 @@
 
 extern PDO_STRUCT KISTAR[KISTAR_NUM];
 extern short mode;
-extern INPUT_LIST input;
+extern JOINT_INPUT_LIST joint_input;
+extern MOTION_INPUT_LIST motion_input_1, motion_input_2, motion_input_3, motion_input_4;
 extern mutex mtx;
 
 CControlThread::CControlThread() : CLoopingThread()
@@ -116,6 +117,11 @@ double CControlThread::sin_motion(double pos_init, double pos_fin, double time_i
     return (a + b * sin(c * (time_now + d)));
 }
 
+double CControlThread::sinWave(double amplitude, double period, double offset)
+{
+    return (offset + amplitude * sin((2 * M_PI / period) * CONTROL_PERIOD_IN_s * tick));
+}
+
 void CControlThread::controlWithGUI()
 {
     switch (mode)
@@ -139,28 +145,49 @@ void CControlThread::controlWithGUI()
             break;
 
         case MODE_JOINT_POSITION:
-            KISTAR[0].write->J1_TARGET1 = input.J1_TARGET1;
-            KISTAR[0].write->J1_TARGET2 = input.J1_TARGET2;
-            KISTAR[0].write->J1_TARGET3 = input.J1_TARGET3;
-            KISTAR[0].write->J1_TARGET4 = input.J1_TARGET4;
+            KISTAR[0].write->J1_TARGET1 = joint_input.J1_TARGET1;
+            KISTAR[0].write->J1_TARGET2 = joint_input.J1_TARGET2;
+            KISTAR[0].write->J1_TARGET3 = joint_input.J1_TARGET3;
+            KISTAR[0].write->J1_TARGET4 = joint_input.J1_TARGET4;
 
-            KISTAR[0].write->J2_TARGET1 = input.J2_TARGET1;
-            KISTAR[0].write->J2_TARGET2 = input.J2_TARGET2;
-            KISTAR[0].write->J2_TARGET3 = input.J2_TARGET3;
-            KISTAR[0].write->J2_TARGET4 = input.J2_TARGET4;
+            KISTAR[0].write->J2_TARGET1 = joint_input.J2_TARGET1;
+            KISTAR[0].write->J2_TARGET2 = joint_input.J2_TARGET2;
+            KISTAR[0].write->J2_TARGET3 = joint_input.J2_TARGET3;
+            KISTAR[0].write->J2_TARGET4 = joint_input.J2_TARGET4;
 
-            KISTAR[0].write->J3_TARGET1 = input.J3_TARGET1;
-            KISTAR[0].write->J3_TARGET2 = input.J3_TARGET2;
-            KISTAR[0].write->J3_TARGET3 = input.J3_TARGET3;
-            KISTAR[0].write->J3_TARGET4 = input.J3_TARGET4;
+            KISTAR[0].write->J3_TARGET1 = joint_input.J3_TARGET1;
+            KISTAR[0].write->J3_TARGET2 = joint_input.J3_TARGET2;
+            KISTAR[0].write->J3_TARGET3 = joint_input.J3_TARGET3;
+            KISTAR[0].write->J3_TARGET4 = joint_input.J3_TARGET4;
 
-            KISTAR[0].write->J4_TARGET1 = input.J4_TARGET1;
-            KISTAR[0].write->J4_TARGET2 = input.J4_TARGET2;
-            KISTAR[0].write->J4_TARGET3 = input.J4_TARGET3;
-            KISTAR[0].write->J4_TARGET4 = input.J4_TARGET4;
+            KISTAR[0].write->J4_TARGET1 = joint_input.J4_TARGET1;
+            KISTAR[0].write->J4_TARGET2 = joint_input.J4_TARGET2;
+            KISTAR[0].write->J4_TARGET3 = joint_input.J4_TARGET3;
+            KISTAR[0].write->J4_TARGET4 = joint_input.J4_TARGET4;
             break;
 
         case MODE_MOTION:
+            KISTAR[0].write->J1_TARGET1 = (int16)sinWave(motion_input_1.amplitude, motion_input_1.period, 0);
+            KISTAR[0].write->J1_TARGET2 = (int16)sinWave(motion_input_1.amplitude, motion_input_1.period, 0);
+            KISTAR[0].write->J1_TARGET3 = (int16)sinWave(motion_input_1.amplitude, motion_input_1.period, 0);
+            KISTAR[0].write->J1_TARGET4 = (int16)sinWave(motion_input_1.amplitude, motion_input_1.period, 0);
+
+            KISTAR[0].write->J2_TARGET1 = (int16)sinWave(motion_input_2.amplitude, motion_input_2.period, 0);
+            KISTAR[0].write->J2_TARGET2 = (int16)sinWave(motion_input_2.amplitude, motion_input_2.period, 0);
+            KISTAR[0].write->J2_TARGET3 = (int16)sinWave(motion_input_2.amplitude, motion_input_2.period, 0);
+            KISTAR[0].write->J2_TARGET4 = (int16)sinWave(motion_input_2.amplitude, motion_input_2.period, 0);
+
+            KISTAR[0].write->J3_TARGET1 = (int16)sinWave(motion_input_3.amplitude, motion_input_3.period, 0);
+            KISTAR[0].write->J3_TARGET2 = (int16)sinWave(motion_input_3.amplitude, motion_input_3.period, 0);
+            KISTAR[0].write->J3_TARGET3 = (int16)sinWave(motion_input_3.amplitude, motion_input_3.period, 0);
+            KISTAR[0].write->J3_TARGET4 = (int16)sinWave(motion_input_3.amplitude, motion_input_3.period, 0);
+
+            KISTAR[0].write->J4_TARGET1 = (int16)sinWave(motion_input_4.amplitude, motion_input_4.period, 0);
+            KISTAR[0].write->J4_TARGET2 = (int16)sinWave(motion_input_4.amplitude, motion_input_4.period, 0);
+            KISTAR[0].write->J4_TARGET3 = (int16)sinWave(motion_input_4.amplitude, motion_input_4.period, 0);
+            KISTAR[0].write->J4_TARGET4 = (int16)sinWave(motion_input_4.amplitude, motion_input_4.period, 0);
+
+            tick++;
             break;
 
         default:
@@ -187,11 +214,6 @@ void CControlThread::controlTest()
     vec9.push_back((int)(KISTAR[0].read->J1_DATA4));
 
     tick++;
-}
-
-double CControlThread::sinWave(double amplitude, double period, double offset)
-{
-    return (offset + amplitude * sin((2 * M_PI / period) * CONTROL_PERIOD_IN_s * tick));
 }
 
 void CControlThread::task()

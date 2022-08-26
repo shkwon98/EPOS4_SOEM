@@ -4,7 +4,7 @@
 #include "SOEM.hpp"
 #include "CPdoMapping.hpp"
 #include "CControlThread.hpp"
-#include "tcpCommand.hpp"
+#include "tcpRecieve.hpp"
 // #include "mytest.h"  // This is for vision part.
 
 using namespace std;
@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
 
             motorTask.rtLoopStart(CONTROL_PERIOD_IN_ns);  // Start Real-Time Control Thread
 
-            thread th_tcpCommand(&tcpCommand);            // Start TCP Command Receiver Thread
-            th_tcpCommand.join();                         // Block until Remote Program Shutdown
+            thread th_tcpRecieve(&tcpRecieve);            // Start TCP Command Receiver Thread
+            th_tcpRecieve.join();                         // Block until Remote Program Shutdown
             // sleep(60);
 
             cout << "\n\nRemote Program is off. Motor Power off.\n\n";

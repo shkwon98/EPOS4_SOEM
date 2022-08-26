@@ -52,14 +52,14 @@ int CTcpPacket::readPacket()
     {
         if (errno != EAGAIN)
         {
-            perror("\nTCP: read() error");
-            printf("----- Socket close -----\n");
+            // perror("\nTCP: read() error");
+            // printf("----- Socket close -----\n");
             exit(1);
         }
     }
     else if (retval == 0)
     {
-        perror("\n----- Socket close -----");
+        // perror("\n----- Socket close -----");
         isRemoteON = false;
     }
     else    // Packet Process

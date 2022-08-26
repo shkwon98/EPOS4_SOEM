@@ -1,9 +1,10 @@
-#include "tcpCommand.hpp"
+#include "tcpRecieve.hpp"
 
 short mode;
-INPUT_LIST input;
+JOINT_INPUT_LIST joint_input;
+MOTION_INPUT_LIST motion_input_1, motion_input_2, motion_input_3, motion_input_4;
 
-void tcpCommand()
+void tcpRecieve()
 {
     CTcpPacket* tcpPacket;
     tcpPacket = new CTcpPacket();
@@ -19,18 +20,21 @@ void tcpCommand()
                     break;
 
                 case MODE_JOINT_POSITION:
-                    tcpPacket->decode(input);
+                    tcpPacket->decode(joint_input);
                     break;
 
                 case MODE_MOTION:
-                    // tcpPacket->decode(input);
+                    tcpPacket->decode(motion_input_1);
+                    tcpPacket->decode(motion_input_2);
+                    tcpPacket->decode(motion_input_3);
+                    tcpPacket->decode(motion_input_4);
                     break;
 
                 default:
                     break;
             }
         }
-        osal_usleep(10000);
+        osal_usleep(1000);
     }
 
     delete tcpPacket;

@@ -13,6 +13,12 @@
 
 typedef struct
 {
+    double    amplitude;
+    double    period;
+}MOTION_INPUT_LIST;
+
+typedef struct
+{
     int16_t   J1_TARGET1;
     int16_t   J1_TARGET2;
     int16_t   J1_TARGET3;
@@ -32,7 +38,7 @@ typedef struct
     int16_t   J4_TARGET2;
     int16_t   J4_TARGET3;
     int16_t   J4_TARGET4;
-}INPUT_LIST;
+}JOINT_INPUT_LIST;
 
 typedef struct
 {
