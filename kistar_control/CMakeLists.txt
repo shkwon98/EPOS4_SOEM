@@ -14,5 +14,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME}
     kistar_ethercat    
     kistar_thread
-    kistar_socket
     )

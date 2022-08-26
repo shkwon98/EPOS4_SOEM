@@ -20,9 +20,8 @@ add_subdirectory(kistar_thread)
 # add_subdirectory(RobotCamera)
 
 # adding the executable files & linking libraries
-add_executable(${PROJECT_NAME} kistar_main.cpp)
+add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME}
-        kistar_ethercat
         kistar_control
         # RobotCamera
     )

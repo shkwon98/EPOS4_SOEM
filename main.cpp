@@ -9,7 +9,7 @@
 
 using namespace std;
 
-static CControlThread motorTask;
+static CControlThread th_rtTask;
 PDO_STRUCT KISTAR[KISTAR_NUM];
 
 mutex mtx;
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
         {
             thread th_ecatCheck(SOEM::ecatCheck);         // Start SOEM ecatCheck Thread
 
-            motorTask.rtLoopStart(CONTROL_PERIOD_IN_ns);  // Start Real-Time Control Thread
+            th_rtTask.rtLoopStart(CONTROL_PERIOD_IN_ns);  // Start Real-Time Control Thread
 
             thread th_tcpRecieve(&tcpRecieve);            // Start TCP Command Receiver Thread
             th_tcpRecieve.join();                         // Block until Remote Program Shutdown
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
             cout << "\n\nRemote Program is off. Motor Power off.\n\n";
             SOEM::inOP = false;      // Start Program End Process
             sleep(1);                // Wait for the motor power to turn off
-            motorTask.rtLoopStop();  // Stop and Join Real-Time Control Thread
+            th_rtTask.rtLoopStop();  // Stop and Join Real-Time Control Thread
             th_ecatCheck.join();     // Join SOEM ecatCheck Thread 
         }
 
