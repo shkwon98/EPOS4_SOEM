@@ -24,6 +24,8 @@ This is a real-time EtherCAT master application to control EtherCAT slave device
 ### Install SOEM
 `git clone https://github.com/OpenEtherCATsociety/SOEM`
 
+`cd SOEM`
+
 `mkdir build`
 
 `cd build`
