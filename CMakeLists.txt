@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.4)
 add_compile_options(-Wall -Wextra)
 
 # project information
-project(kistar)
+project(KISTAR_Hand_SOEM)
 
 # open-source packages
 find_package(soem REQUIRED)

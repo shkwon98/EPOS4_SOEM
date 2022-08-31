@@ -9,8 +9,7 @@
 class CPdoMapping
 {
 public:
-    static int mapMotorPDOs(uint16 slaveIdx);
-    static int initMotor(uint16 slaveIdx);
+    static int mapSlavePDOs(uint16 slaveIdx);
 
 private:
     static int wkc;

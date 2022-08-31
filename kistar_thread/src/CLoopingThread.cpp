@@ -11,7 +11,10 @@ CLoopingThread::~CLoopingThread()
     }
 }
 
-
+/** Start Non-rt looping thread. Turn m_isActive flag to true.
+ *
+ * @return m_isActive
+*/
 bool CLoopingThread::loopStart()
 {
     m_isActive = true;
@@ -26,6 +29,10 @@ bool CLoopingThread::loopStart()
     return m_isActive;
 }
 
+/** Stop Non-rt loop and join the thread. Turn m_isActive flag to false.
+ *
+ * @return m_isActive
+*/
 bool CLoopingThread::loopStop()
 {
     m_isActive = false;
@@ -33,6 +40,11 @@ bool CLoopingThread::loopStop()
     return m_isActive;
 }
 
+/** Start real-time looping thread. Turn m_isActive flag to true.
+ *
+ * @param[in] period        real-time loop period in nano-seconds.
+ * @return    m_isActive
+*/
 bool CLoopingThread::rtLoopStart(int64_t period)
 {
     m_isActive = true;
@@ -82,6 +94,10 @@ bool CLoopingThread::rtLoopStart(int64_t period)
     return m_isActive;
 }
 
+/** Stop real-time loop and join the thread. Turn m_isActive flag to false.
+ *
+ * @return m_isActive
+*/
 bool CLoopingThread::rtLoopStop()
 {
     return loopStop();

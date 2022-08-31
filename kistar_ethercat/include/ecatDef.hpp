@@ -52,9 +52,6 @@
 
 #define SERVO_TIMEOUT                       50000
 
-// #define RAD2DEG     57.2957795131
-// #define DEG2RAD     0.01745329252
-
 int servo_enable(uint16 StatusWord, uint16 * ControlWord);
 
 
@@ -68,89 +65,79 @@ typedef struct _mapping_obj
 }mapping_obj;
 
 
+typedef struct PACKED
+{
+    uint16 J0_Servo_On : 1;
+    uint16 J1_Servo_On : 1;
+    uint16 J2_Servo_On : 1;
+    uint16 J3_Servo_On : 1;
+
+    uint16 J4_Servo_On : 1;
+    uint16 J5_Servo_On : 1;
+    uint16 J6_Servo_On : 1;
+    uint16 J7_Servo_On : 1;
+
+    uint16 J8_Servo_On : 1;
+    uint16 J9_Servo_On : 1;
+    uint16 J10_Servo_On : 1;
+    uint16 J11_Servo_On : 1;
+
+    uint16 J12_Servo_On : 1;
+    uint16 J13_Servo_On : 1;
+    uint16 J14_Servo_On : 1;
+    uint16 J15_Servo_On : 1;
+}AC_Status1;
+typedef struct PACKED
+{
+    uint16 J0_C_Mode : 1;
+    uint16 J1_C_Mode : 1;
+    uint16 J2_C_Mode : 1;
+    uint16 J3_C_Mode : 1;
+
+    uint16 J4_C_Mode : 1;
+    uint16 J5_C_Mode : 1;
+    uint16 J6_C_Mode : 1;
+    uint16 J7_C_Mode : 1;
+
+    uint16 J8_C_Mode : 1;
+    uint16 J9_C_Mode : 1;
+    uint16 J10_C_Mode : 1;
+    uint16 J11_C_Mode : 1;
+
+    uint16 J12_C_Mode : 1;
+    uint16 J13_C_Mode : 1;
+    uint16 J14_C_Mode : 1;
+    uint16 J15_C_Mode : 1;
+}AC_Status2;
+typedef struct PACKED
+{
+    uint16 mode : 4;
+    uint16 register_num : 12;
+}AC_Status3;
+typedef struct PACKED
+{
+    uint16 NOT_USED : 16;
+}AC_Status4;
+
 //////////////////// PDO Setting ////////////////////
 typedef struct PACKED  // 0x1600 RxPDO
 {
-    int16   J1_TARGET1;         // 0x00060001
-    int16   J1_TARGET2;         // 0x00060002
-    int16   J1_TARGET3;         // 0x00060003
-    int16   J1_TARGET4;         // 0x00060004
-
-    int16   J2_TARGET1;         // 0x00060005
-    int16   J2_TARGET2;         // 0x00060006
-    int16   J2_TARGET3;         // 0x00060007
-    int16   J2_TARGET4;         // 0x00060008
-
-    int16   J3_TARGET1;         // 0x00060009
-    int16   J3_TARGET2;         // 0x0006000A
-    int16   J3_TARGET3;         // 0x0006000B
-    int16   J3_TARGET4;         // 0x0006000C
-
-    int16   J4_TARGET1;         // 0x0006000D
-    int16   J4_TARGET2;         // 0x0006000E
-    int16   J4_TARGET3;         // 0x0006000F
-    int16   J4_TARGET4;         // 0x00060010
-
-    int16   HAND_STATUS_OUT1;   // 0x00060011
-    int16   HAND_STATUS_OUT2;   // 0x00060012
-    int16   HAND_STATUS_OUT3;   // 0x00060013
-    int16   HAND_STATUS_OUT4;   // 0x00060014
-
-    int16   ADD_INFO_1;         // 0x00060015
-    int16   ADD_INFO_2;         // 0x00060016
-    int16   ADD_INFO_3;         // 0x00060017
-    int16   ADD_INFO_4;         // 0x00060018
-    int16   ADD_INFO_5;         // 0x00060019
-    int16   ADD_INFO_6;         // 0x0006001A
-    int16   ADD_INFO_7;         // 0x0006001B
-    int16   ADD_INFO_8;         // 0x0006001C
-    int16   ADD_INFO_9;         // 0x0006001D
-    int16   ADD_INFO_10;        // 0x0006001E
-    int16   ADD_INFO_11;        // 0x0006001F
-    int16   ADD_INFO_12;        // 0x00060020
+    uint16 JOINT_TARGET[16];
+    AC_Status1 Actuator_Status1;
+    AC_Status2 Actuator_Status2;
+    AC_Status3 Actuator_Status3;
+    AC_Status4 Actuator_Status4;
+    uint16 ADD_INFO[12];
 }PDO_WRITE;
-
 typedef struct PACKED  // 0x1A00 TxPDO
 {
-    int16   J1_DATA1;          // 0x00060001
-    int16   J1_DATA2;          // 0x00060002
-    int16   J1_DATA3;          // 0x00060003
-    int16   J1_DATA4;          // 0x00060004
-
-    int16   J2_DATA1;          // 0x00060005
-    int16   J2_DATA2;          // 0x00060006
-    int16   J2_DATA3;          // 0x00060007
-    int16   J2_DATA4;          // 0x00060008
-
-    int16   J3_DATA1;          // 0x00060009
-    int16   J3_DATA2;          // 0x0006000A
-    int16   J3_DATA3;          // 0x0006000B
-    int16   J3_DATA4;          // 0x0006000C
-
-    int16   J4_DATA1;          // 0x0006000D
-    int16   J4_DATA2;          // 0x0006000E
-    int16   J4_DATA3;          // 0x0006000F
-    int16   J4_DATA4;          // 0x00060010
-
-    int16   HAND_STATUS_IN1;   // 0x00060011
-    int16   HAND_STATUS_IN2;   // 0x00060012
-    int16   HAND_STATUS_IN3;   // 0x00060013
-    int16   HAND_STATUS_IN4;   // 0x00060014
-
-    int16   ADD_INFO_1;         // 0x00060015
-    int16   ADD_INFO_2;         // 0x00060016
-    int16   ADD_INFO_3;         // 0x00060017
-    int16   ADD_INFO_4;         // 0x00060018
-    int16   ADD_INFO_5;         // 0x00060019
-    int16   ADD_INFO_6;         // 0x0006001A
-    int16   ADD_INFO_7;         // 0x0006001B
-    int16   ADD_INFO_8;         // 0x0006001C
-    int16   ADD_INFO_9;         // 0x0006001D
-    int16   ADD_INFO_10;        // 0x0006001E
-    int16   ADD_INFO_11;        // 0x0006001F
-    int16   ADD_INFO_12;        // 0x00060020
+    uint16 JOINT_DATA[16];
+    AC_Status1 Actuator_Status1;
+    AC_Status2 Actuator_Status2;
+    AC_Status3 Actuator_Status3;
+    AC_Status4 Actuator_Status4;
+    uint16 ADD_INFO[12];
 }PDO_READ;
-
 typedef struct PACKED
 {
     PDO_WRITE  *write;
@@ -162,7 +149,6 @@ typedef struct PACKED
 #define KISTAR_NUM 1
 // #define EPOS4_NUM 1
 // #define ELMO_NUM 5
-
 #define TOTAL_SLAVE_NUM ( KISTAR_NUM )
 // TOTAL_SLAVE_NUM ( EPOS4_NUM + ELMO_NUM )
 
@@ -170,5 +156,7 @@ typedef struct PACKED
 #define CONTROL_PERIOD_IN_s   ( 1e-03 * CONTROL_PERIOD_IN_ms )
 #define CONTROL_PERIOD_IN_us  ( 1e03 * CONTROL_PERIOD_IN_ms )
 #define CONTROL_PERIOD_IN_ns  ( 1e06 * CONTROL_PERIOD_IN_ms )
+
+// #define USE_GUI
 
 #endif // ECATDEF_HPP

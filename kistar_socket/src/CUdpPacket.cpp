@@ -19,6 +19,10 @@ CUdpPacket::~CUdpPacket()
     close(socket_fd);
 }
 
+/** Set the header of UDP packet.
+ *
+ * @param[in] header     command header from socketDef.hpp, f.e. "STREAM_MODE"
+*/
 void CUdpPacket::setCommandHeader(uint16_t header)
 {
    // Initialize Variable
@@ -42,7 +46,8 @@ void CUdpPacket::setCommandHeader(uint16_t header)
     encodeIndex = encodeIndex + sizeof(header);
 }
 
-
+/** Send txBuffer UDP packet to client.
+*/
 void CUdpPacket::sendPacket()
 {
    ///////////////////////////////////////////////////////

@@ -4,6 +4,9 @@ short mode;
 JOINT_INPUT_LIST joint_input;
 MOTION_INPUT_LIST motion_input_1, motion_input_2, motion_input_3, motion_input_4;
 
+/** Thread function that will be responsible for receiving tcp packets.
+ *
+*/
 void tcpRecieve()
 {
     CTcpPacket* tcpPacket;

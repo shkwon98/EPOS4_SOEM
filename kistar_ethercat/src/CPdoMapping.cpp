@@ -5,10 +5,10 @@ int CPdoMapping::retVal;
 
 /** SOEM wrapper for ec_SDOwrite().
  *
- * @param slaveIdx     = Slave index.
- * @param index     = SDO index.
- * @param subindex  = SDO sub-index.
- * @param value     = Output value.
+ * @param slaveIdx  Slave index.
+ * @param index     SDO index.
+ * @param subindex  SDO sub-index.
+ * @param value     Output value.
  * @return working counter.
  */
 int CPdoMapping::SDO_write8(uint16 slaveIdx, uint16 index, uint8 subindex, uint8 value)
@@ -27,12 +27,12 @@ int CPdoMapping::SDO_write32(uint16 slaveIdx, uint16 index, uint8 subindex, uint
     return retVal;
 }
 
-/** Map EPOS4 motor drive PDOs.
+/** Map PDOs of connected ethercat slave device.
  *
  * @param[in] slaveIdx    = Slave index.
  * @return 1 on success, 0 on failure.
  */
-int CPdoMapping::mapMotorPDOs(uint16 slaveIdx)
+int CPdoMapping::mapSlavePDOs(uint16 slaveIdx)
 {
     wkc = 0;
 
@@ -70,32 +70,6 @@ int CPdoMapping::mapMotorPDOs(uint16 slaveIdx)
         return 0;
     }
 
-    printf("EPOS4 slave %d set\n", slaveIdx);
+    printf("Slave %d, PDO set\n", slaveIdx);
     return 1;
-}
-
-/** Initialize motor parameters via SDO
- *
- * @param slaveIdx      = Slave index.
- * @return 0.
- */
-int CPdoMapping::initMotor(uint16 slaveIdx)
-{
-    printf("Motor drive %d init\n", slaveIdx);
-
-    // /* Motor params */
-    // SDO_write32(slaveIdx, 0x2383, 12, 25456);   /* motor torque constant */
-    // SDO_write32(slaveIdx, 0x2383, 13, 650000);  /* motor peak torque */
-    // SDO_write32(slaveIdx, 0x2383, 14, 20000);   /* motor continuous torque */
-    // SDO_write32(slaveIdx, 0x6076, 0, 200);      /* motor rated torque */
-
-    // /* Loop gains */
-    // SDO_write16(slaveIdx, 0x2382, 1, 0);        /* position loop gain (Pp) */
-    // SDO_write16(slaveIdx, 0x2381, 1, 0);        /* velocity loop gain (Vp) */
-
-    // /* Motor limits */
-    // SDO_write16(slaveIdx, 0x2110, 0, 1400);     /* peak current limit */
-    // SDO_write16(slaveIdx, 0x2111, 0, 700);      /* continuous current limit (units of 0.01A) */
-
-    return 0;
 }

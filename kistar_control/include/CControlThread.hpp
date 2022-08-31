@@ -25,36 +25,36 @@ protected:
 
 private:
     CUdpPacket* udpPacket;
-
     int64_t toff = 0;
-
     unsigned int tick = 0;
-    double curPos = 0.0;
-    double tarPos = 0.0;
-    bool bEndFlag = true;
-    double endCnt = 0;
+
+    void ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
+    {
+        static int64 integral = 0;
+        int64 delta;
+
+        delta = (refTime) % cycleTime;
+        if (delta > (cycleTime / 2)) { delta = delta - cycleTime; }
+        if (delta > 0) { integral++; }
+        if (delta < 0) { integral--; }
+        *offsetTime = -(delta / 100) - (integral / 20);
+    }
+
+    void printStatus();
+    void sendStatusToGUI();
+
+    void controlWithGUI();
+    void controlStandAlone();
+
+    // double curPos = 0.0;
+    // double tarPos = 0.0;
+    // bool bEndFlag = true;
+    // double endCnt = 0;
+    // double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
 
     // bool isMotorTorqueOn = false;
     // void motorTorqueOn();
     // void motorTorqueOff();
-
-    void printStatus();
-    void sendStatusToGui();
-
-    double sin_motion(double pos_init, double pos_fin, double time_init, double time_fin, double time_now);
-    double sinWave(double amplitude, double period, double offset);
-    void controlWithGUI();
-    void controlTest();
-
-    vector<int> vec1;
-    vector<int> vec2;
-    vector<int> vec3;
-    vector<int> vec4;
-    vector<int> vec5;
-    vector<int> vec6;
-    vector<int> vec7;
-    vector<int> vec8;
-    vector<int> vec9;
 };
 
 #endif // CCONTROLTHREAD_HPP

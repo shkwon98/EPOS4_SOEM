@@ -44,7 +44,10 @@ CTcpPacket::~CTcpPacket()
     close(server_fd);
 }
 
-
+/** Read TCP packet in rxBuffer and copy it into packetBuffer.
+ *
+ * @return On success: the number of bytes read, On error: -1
+*/
 int CTcpPacket::readPacket()
 {
     retval = read(client_fd, rxBuffer, sizeof(rxBuffer));

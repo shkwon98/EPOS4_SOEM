@@ -1,21 +1,20 @@
 #include "SOEM.hpp"
 
+#define EC_TIMEOUTMON 500
+
 using namespace std;
 
 char SOEM::IOmap[4096];
-int SOEM::chk = 0;
 int SOEM::expectedWKC = 0;
 int SOEM::wkc = 0;
-uint8 SOEM::currentgroup = 0;
 
 // Flag //
 bool SOEM::inOP = false;
 
 // Functions //
-/** Initialize lib in single NIC mode and init all slaves.
+/** Check that the correct number of devices are connected and init all slaves.
  *
  * @param[in] ifname              Dev name, f.e. "eth0"
- * @return                        true if succeed
 */
 void SOEM::initializeEtherCAT(const char* ifname)
 {
@@ -57,6 +56,10 @@ void SOEM::initializeEtherCAT(const char* ifname)
     }
 }
 
+/** Map PDOs of connected slave devices as defined in input parameter function.
+ *
+ * @param[in] *setup        pdo mapping function, f.e. "CPdoMapping::mapSlavePDOs"
+*/
 void SOEM::pdoMapping(int (*setup)(uint16 slaveIdx))
 {
     for (int i = 1; i <= ec_slavecount; ++i)
@@ -66,9 +69,7 @@ void SOEM::pdoMapping(int (*setup)(uint16 slaveIdx))
     cout << "\nSlaves mapped!\n";
 }
 
-
-/** Change slave states to Operational. Turn inOP flage to true if all slaves become Operational(NMT).
- * Exit program if failed.
+/** Change slave states to Operational. Turn inOP flag to true if all slaves become Operational.
 */
 void SOEM::goingOperational()
 {
@@ -93,7 +94,7 @@ void SOEM::goingOperational()
     // request OP state for all slaves
     ec_writestate(0);
     // wait for all slaves to reach OP state
-    chk = 200;
+    int chk = 200;
     do
     {
         ec_send_processdata();
@@ -109,8 +110,10 @@ void SOEM::goingOperational()
     else { cout << "Not all slaves reached operational state.\n"; }
 }
 
-
-/** Map input output buffer Structs
+/** Map slave's input output address with user defined structs.
+ *
+ * @param[in] *servo            structure of mapped pdo
+ * @param[in] num_of_servos     number of slave devices
 */
 void SOEM::mapIOStructs(PDO_STRUCT servo[], int num_of_servos)
 {
@@ -121,7 +124,8 @@ void SOEM::mapIOStructs(PDO_STRUCT servo[], int num_of_servos)
     }
 }
 
-
+/** Request INIT state for all slaves and stop SOEM, close ethercat socket.
+*/
 void SOEM::terminateEtherCAT()
 {
     // request INIT state for all slaves
@@ -132,19 +136,6 @@ void SOEM::terminateEtherCAT()
     ec_close();
 }
 
-
-void SOEM::ec_sync(int64 refTime, int64 cycleTime, int64 *offsetTime)
-{
-    static int64 integral = 0;
-    int64 delta;
-
-    delta = (refTime) % cycleTime;
-    if (delta > (cycleTime / 2)) { delta = delta - cycleTime; }
-    if (delta > 0) { integral++; }
-    if (delta < 0) { integral--; }
-    *offsetTime = -(delta / 100) - (integral / 20);
-}
-
 /** SOEM providing function. Check the EtherCAT communication state, and recover when the error occured.
  * Run in thread separately.
 */
@@ -152,16 +143,16 @@ void *SOEM::ecatCheck() // SOEM providing function. Check the EtherCAT communica
 {
     while (inOP)
     {
-        if ((wkc < expectedWKC) || ec_group[currentgroup].docheckstate)
+        if ((wkc < expectedWKC) || ec_group[0].docheckstate)
         {
           /* one ore more slaves are not responding */
-            ec_group[currentgroup].docheckstate = FALSE;
+            ec_group[0].docheckstate = FALSE;
             ec_readstate();
             for (int slave = 1; slave <= ec_slavecount; slave++)
             {
-                if ((ec_slave[slave].group == currentgroup) && (ec_slave[slave].state != EC_STATE_OPERATIONAL))
+                if ((ec_slave[slave].group == 0) && (ec_slave[slave].state != EC_STATE_OPERATIONAL))
                 {
-                    ec_group[currentgroup].docheckstate = TRUE;
+                    ec_group[0].docheckstate = TRUE;
                     if (ec_slave[slave].state == (EC_STATE_SAFE_OP + EC_STATE_ERROR))
                     {
                         printf("ERROR : slave %d is in SAFE_OP + ERROR, attempting ack.\n", slave);
@@ -210,7 +201,7 @@ void *SOEM::ecatCheck() // SOEM providing function. Check the EtherCAT communica
                     }
                 }
             }
-            if (!ec_group[currentgroup].docheckstate)
+            if (!ec_group[0].docheckstate)
                 printf("OK : all slaves resumed OPERATIONAL.\n");
         }
         osal_usleep(10000);
