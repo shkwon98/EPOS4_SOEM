@@ -1,4 +1,4 @@
-# epos4_soem_controller
+# epos4-soem-control
 This is a real-time EtherCAT master application to control EtherCAT slave devices(e.g. epos4, elmo, ...).
 
 ---
