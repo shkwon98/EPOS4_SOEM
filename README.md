@@ -1,4 +1,4 @@
-# ANSUR_SOEM_Controller
+# epos4_soem_controller
 This is a real-time EtherCAT master application to control EtherCAT slave devices(e.g. epos4, elmo, ...).
 
 ---
@@ -11,7 +11,7 @@ This is a real-time EtherCAT master application to control EtherCAT slave device
 + To use this application with gui, extra Ethernet connection on Raspberry Pi is required
 	+ For example, WIZnet W5500 Ethernet module with SPI interface or wi-fi can be applied
 	+ If you are going to use the same solution, you can find out details [here](https://github.com/shkwon98/RPI_PreemptRT)
-+ [ANSUR_GUI](https://github.com/shkwon98/ANSUR_SOEM_GUI) installed remote PC is required for remote connection
++ [epos4-soem-gui](https://github.com/shkwon98/epos4-soem-gui) installed remote PC is required for remote connection
 #### FRAMEWORK:
 
 ![framework](https://user-images.githubusercontent.com/86837107/155870476-c4409fc2-9101-4b08-91ce-bc8333312e19.jpg)
